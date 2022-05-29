@@ -1,3 +1,4 @@
+import '../styles/officesList.css';
 
 interface Props {
     offices: any[];
@@ -7,9 +8,11 @@ function OfficesList(props: Props){
     return(
         <>
             <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                <h1 className="display-4">SwartWork - find your place to work</h1>
+                <h1 className="display-4"><span className='main-logo'>SmartWork. Find your place to work</span></h1>
                 <p className="lead">
-                    Just check out the offices we have and let's subscribe to a place to work :)
+                    <span className='second-line'>
+                        Just check out the offices we have and let's subscribe to a place to work :)
+                    </span>
                 </p>
             </div>
             <div className="container">

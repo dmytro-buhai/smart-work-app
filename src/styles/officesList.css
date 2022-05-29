@@ -1,0 +1,21 @@
+.display-4{
+    color: aliceblue;
+    margin-bottom: 2%;
+}
+
+.lead{
+    color: aliceblue;
+}
+
+.main-logo{
+    padding: 1%;
+    font-weight: bold;  
+    font-size: 48pt;
+    background-color: red;
+}
+
+.second-line{ 
+    padding: 3px;
+    font-size: 18pt;
+    background-color: red;
+}

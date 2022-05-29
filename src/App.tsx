@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import axios from 'axios';
 import SWNavbar from './components/SWNavbar';
 import OfficesList from './components/OfficesList';
@@ -9,7 +8,7 @@ function App() {
   const[offices, setOffices] = useState([]);
 
   useEffect(() => {
-    axios.get("https://localhost:5001/api/Office/List").then(response => {
+    axios.get("https://localhost:5001/api/Offices/List").then(response => {
       console.log(response);
       setOffices(response.data);
     })
