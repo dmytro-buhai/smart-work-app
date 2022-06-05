@@ -8,6 +8,8 @@ import { Container } from 'semantic-ui-react';
 function App() {
 
   const[offices, setOffices] = useState<Office[]>([]);
+  const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined)
+  
   const pageInfo = {
     countItems: 10
   }
@@ -20,11 +22,24 @@ function App() {
     })
   }, [])
 
+  function handleSelectOffice(id: number){
+    setSelectedOffice(offices.find(x => x.id === id))
+  }
+
+  function handleCancelSelectOffice(){
+    setSelectedOffice(undefined)
+  }
+
   return (
     <>
       <NavBar />
       <Container style={{marginTop: '7em'}}>
-        <OfficeDashboard offices = {offices} />
+        <OfficeDashboard 
+          offices = {offices}
+          selectedOffice={selectedOffice}
+          selectOffice={handleSelectOffice} 
+          cancelSelectOffice={handleCancelSelectOffice}
+        />
       </Container> 
     </>
   );

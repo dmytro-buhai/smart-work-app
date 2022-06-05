@@ -4,9 +4,10 @@ import { Office } from "../models/office";
 
 interface Props{
     office: Office;
+    cancelSelectOffice: () => void;
 }
 
-export default function OfficeDetails({office}: Props){
+export default function OfficeDetails({office, cancelSelectOffice}: Props){
     return(
         <Card fluid>
             <Image src={`/assets/${office.photoFileName}.jpg`} wrapped ui={false} />
@@ -22,7 +23,7 @@ export default function OfficeDetails({office}: Props){
             <Card.Content extra>
                 <Button.Group widths='2'>
                     <Button basic color="blue" content='Edit' />
-                    <Button basic color="grey" content='Cancel' />
+                    <Button onClick={cancelSelectOffice} basic color="grey" content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>
