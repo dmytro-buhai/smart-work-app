@@ -10,19 +10,27 @@ interface Props {
     selectedOffice: Office | undefined;
     selectOffice: (id: number) => void;
     cancelSelectOffice: () => void;
+    editMode: boolean;
+    openForm: (id: number) => void;
+    closeForm: () => void;
 }
 
 export default function OfficeDashboard({offices, selectedOffice, 
-        selectOffice, cancelSelectOffice}: Props){
+        selectOffice, cancelSelectOffice, editMode, openForm, closeForm}: Props){
     return(
         <Grid>
             <Grid.Column width='10'>
                 <OfficeList offices={offices} selectOffice={selectOffice}/>
             </Grid.Column>
             <Grid.Column width='6'>
-                {selectedOffice && 
-                <OfficeDetails office={selectedOffice} cancelSelectOffice={cancelSelectOffice}/>}
-                <OfficeForm />
+                {selectedOffice && !editMode &&
+                <OfficeDetails 
+                    office={selectedOffice} 
+                    cancelSelectOffice={cancelSelectOffice}
+                    openForm={openForm}
+                />}
+                {editMode &&
+                <OfficeForm closeForm={closeForm} office={selectedOffice}/>}
             </Grid.Column>
         </Grid>
     )

@@ -1,7 +1,11 @@
 import React from "react";
-import { Container, Dropdown, Menu } from "semantic-ui-react";
+import { Button, Container, Dropdown, Menu } from "semantic-ui-react";
 
-export default function NavBar(){
+interface Props {
+    openForm: () => void;
+}
+
+export default function NavBar({openForm}: Props){
     return(
         <Menu inverted fixed="top">
             <Container>
@@ -11,6 +15,9 @@ export default function NavBar(){
                 </Menu.Item>
                 <Menu.Item name="Discover" />
                 <Menu.Item name="Companies" />
+                <Menu.Item>
+                    <Button onClick={openForm} positive content='Create office' />
+                </Menu.Item>
                 <Menu.Menu position='right'>
                     <Menu.Item name="Account" />
                     <Dropdown item text='Other'>

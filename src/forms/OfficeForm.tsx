@@ -1,7 +1,13 @@
 import React from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
+import { Office } from "../models/office";
 
-export default function OfficeForm(){
+interface Props{
+    office: Office | undefined;
+    closeForm: () => void;
+}
+
+export default function OfficeForm({office, closeForm}: Props){
     return(
         <Segment clearing>
             <Form>
@@ -10,7 +16,7 @@ export default function OfficeForm(){
                 <Form.Input placeholder='PhoneNumber'/>
                 <Form.Input placeholder='CompanyId'/>
                 <Button floated="right" positive type="submit" content='Submit' />
-                <Button floated="right" type="button" content='Cancel' />
+                <Button onClick={closeForm} floated="right" type="button" content='Cancel' />
             </Form>
         </Segment>
     )

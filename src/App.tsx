@@ -9,7 +9,8 @@ function App() {
 
   const[offices, setOffices] = useState<Office[]>([]);
   const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined)
-  
+  const[editMode, setEditMode] = useState(false)
+
   const pageInfo = {
     countItems: 10
   }
@@ -30,15 +31,27 @@ function App() {
     setSelectedOffice(undefined)
   }
 
+  function handleFormOpen(id?: number){
+    id ? handleSelectOffice(id) : handleCancelSelectOffice();
+    setEditMode(true);
+  }
+
+  function handleFormClose() {
+    setEditMode(false);
+  }
+
   return (
     <>
-      <NavBar />
+      <NavBar openForm={handleFormOpen}/>
       <Container style={{marginTop: '7em'}}>
         <OfficeDashboard 
           offices = {offices}
           selectedOffice={selectedOffice}
           selectOffice={handleSelectOffice} 
           cancelSelectOffice={handleCancelSelectOffice}
+          editMode={editMode}
+          openForm={handleFormOpen}
+          closeForm={handleFormClose}
         />
       </Container> 
     </>
