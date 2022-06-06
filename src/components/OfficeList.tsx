@@ -19,12 +19,17 @@ function OfficeList({offices, selectOffice, deleteOffice}: Props){
                             <Item.Meta>{office.address}</Item.Meta>
                             <Item.Description>
                                 <div>{office.phoneNumber}</div>
-                                <div>{office.companyId}, {office.isFavourite}</div>
+                                <div>{office.companyId}</div>
                             </Item.Description>
                             <Item.Extra>
                                 <Button onClick={() => selectOffice(office.id)} floated='right' content='View' color='blue' />
                                 <Button onClick={() => deleteOffice(office.id)} floated='right' content='Delete' color='red' />
-                                <Label basic content={office.isFavourite.toString()} />
+                                {office.isFavourite && 
+                                    <Button type="button" color='yellow' content='⭐' />
+                                }
+                                {!office.isFavourite && 
+                                    <Button type="button" content='⭐' />
+                                }
                             </Item.Extra>
                         </Item.Content>
                     </Item>

@@ -6,9 +6,10 @@ interface Props{
     office: Office | undefined;
     closeForm: () => void;
     createOrEdit: (office: Office) => void;
+    submitting: boolean;
 }
 
-export default function OfficeForm({office : selectedOffice, closeForm, createOrEdit}: Props){
+export default function OfficeForm({office : selectedOffice, closeForm, createOrEdit, submitting}: Props){
 
     const initialState = selectedOffice ?? {
         id: 0,
@@ -40,7 +41,7 @@ export default function OfficeForm({office : selectedOffice, closeForm, createOr
                 <Form.Input placeholder='Address' value={office.address} name='address' onChange={handleInputChange} />
                 <Form.Input type="tel" placeholder='PhoneNumber' value={office.phoneNumber} name='phoneNumber' onChange={handleInputChange} />
                 <Form.Input type="number" placeholder='CompanyId' value={office.companyId} name='companyId' onChange={handleInputChange} />
-                <Button floated="right" positive type="submit" content='Submit' />
+                <Button loading={submitting} floated="right" positive type="submit" content='Submit' />
                 <Button onClick={closeForm} floated="right" type="button" content='Cancel' />
             </Form>
         </Segment>

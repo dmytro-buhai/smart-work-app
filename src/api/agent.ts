@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { resolve } from "path";
 import { Office } from "../models/office";
+import { AddOfficeDTO } from "../models/officeDTOs/addOfficeDTO";
+import { UpdateOfficeDTO } from "../models/officeDTOs/updateOfficeDTO";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -13,6 +15,7 @@ axios.defaults.baseURL = 'https://localhost:5001/api';
 axios.interceptors.response.use(async response => {
     try {
         await sleep(1000);
+        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
@@ -34,7 +37,11 @@ const pageInfo = {
 }
 
 const Offices = {
-    list: () => requests.get<Office[]>(`/Offices/List/${pageInfo.countItems}`)
+    list: () => requests.get<Office[]>(`/Offices/List/${pageInfo.countItems}`),
+    details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
+    create: (office: AddOfficeDTO) => requests.post<string>('Office/Add', office),
+    update: (office: UpdateOfficeDTO) => requests.put<string>('Office/Update', office),
+    delete: (id: number) => requests.del<string>(`Office/Delete${id}`),
 }
 
 const agent = {

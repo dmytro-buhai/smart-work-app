@@ -15,10 +15,12 @@ interface Props {
     closeForm: () => void;
     createOrEdit: (office: Office) => void;
     deleteOffice: (id: number) => void;
+    submitting: boolean;
 }
 
-export default function OfficeDashboard({offices, selectedOffice, 
-        selectOffice, cancelSelectOffice, editMode, openForm, closeForm, createOrEdit, deleteOffice}: Props){
+export default function OfficeDashboard({offices, selectedOffice, deleteOffice,
+        selectOffice, cancelSelectOffice, editMode, openForm, 
+        closeForm, createOrEdit, submitting}: Props){
     return(
         <Grid>
             <Grid.Column width='10'>
@@ -35,7 +37,12 @@ export default function OfficeDashboard({offices, selectedOffice,
                     openForm={openForm}
                 />}
                 {editMode &&
-                <OfficeForm closeForm={closeForm} office={selectedOffice} createOrEdit={createOrEdit}/>}
+                <OfficeForm 
+                    closeForm={closeForm} 
+                    office={selectedOffice} 
+                    createOrEdit={createOrEdit}
+                    submitting={submitting}
+                />}
             </Grid.Column>
         </Grid>
     )

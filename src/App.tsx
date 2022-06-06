@@ -5,6 +5,8 @@ import NavBar from './components/NavBar';
 import { Container } from 'semantic-ui-react';
 import agent from './api/agent';
 import LoadingComponent from './components/LoadingComponent';
+import { AddOfficeDTO } from './models/officeDTOs/addOfficeDTO';
+import { UpdateOfficeDTO } from './models/officeDTOs/updateOfficeDTO';
 
 function App() {
 
@@ -12,6 +14,7 @@ function App() {
   const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined);
   const[editMode, setEditMode] = useState(false);
   const[loading, setLoading] = useState(true);
+  const[submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     agent.Offices.list().then(response => {
@@ -38,12 +41,54 @@ function App() {
     setEditMode(false);
   }
 
+  function convertOfficeForCreating(office: Office): AddOfficeDTO{  
+    var addOfficeDTO : AddOfficeDTO = {
+      companyId: office.companyId,
+      name: office.name,
+      address: office.address,
+      phoneNumber: office.phoneNumber,
+      photoFileName: office.photoFileName,
+      isFavourite: office.isFavourite,
+    }
+    return addOfficeDTO;
+  }
+
+  function convertOfficeForUpdating(office: Office): UpdateOfficeDTO{  
+    var updateOfficeDTO : UpdateOfficeDTO = {
+      id: office.id,
+      companyId: office.companyId,
+      name: office.name,
+      address: office.address,
+      phoneNumber: office.phoneNumber,
+      photoFileName: office.photoFileName,
+      isFavourite: office.isFavourite,
+      subscribes: office.subscribes,
+      rooms: office.rooms,
+    }
+
+    console.log(updateOfficeDTO);
+
+    return updateOfficeDTO;
+  }
+
   function handleCreateOrEditOffice(office: Office){
-    office.id 
-    ? setOffices([...offices.filter(x => x.id !== office.id), office])
-    : setOffices([...offices, office]);
-    setEditMode(false);
-    setSelectedOffice(office);
+    setSubmitting(true);
+
+    if(office.id) {
+      agent.Offices.update(office).then(() => {
+        setOffices([...offices.filter(x => x.id !== office.id), office]);
+        setSelectedOffice(office);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    } else {
+      agent.Offices.create(convertOfficeForCreating(office)).then(() => {
+        setOffices([...offices, office]);
+        setSelectedOffice(office);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    }
   }
 
   function handleDeleteOffice(id: number){
@@ -66,6 +111,7 @@ function App() {
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditOffice}
           deleteOffice={handleDeleteOffice}
+          submitting={submitting}
         />
       </Container> 
     </>
