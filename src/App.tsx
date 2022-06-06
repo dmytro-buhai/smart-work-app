@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Office } from './models/office';
 import OfficeDashboard from './components/OfficeDashboard';
 import NavBar from './components/NavBar';
 import { Container } from 'semantic-ui-react';
+import agent from './api/agent';
+import LoadingComponent from './components/LoadingComponent';
 
 function App() {
 
   const[offices, setOffices] = useState<Office[]>([]);
-  const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined)
-  const[editMode, setEditMode] = useState(false)
-
-  const pageInfo = {
-    countItems: 10
-  }
+  const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined);
+  const[editMode, setEditMode] = useState(false);
+  const[loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-    axios.post("https://localhost:5001/api/Offices/List", pageInfo).then(response => {
+    agent.Offices.list().then(response => {
       console.log(response);
-      setOffices(response.data);
+      setOffices(response);
+      setLoading(false);
     })
   }, [])
 
@@ -51,6 +49,8 @@ function App() {
   function handleDeleteOffice(id: number){
     setOffices([...offices.filter(x => x.id !== id)]);
   }
+
+  if (loading) return <LoadingComponent content='Loading app' />
 
   return (
     <>

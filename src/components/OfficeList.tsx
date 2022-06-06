@@ -30,8 +30,7 @@ function OfficeList({offices, selectOffice, deleteOffice}: Props){
                     </Item>
                 ))}
             </Item.Group>
-        </Segment>
-              
+        </Segment>      
     )
 }
 

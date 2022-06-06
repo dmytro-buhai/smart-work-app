@@ -38,8 +38,8 @@ export default function OfficeForm({office : selectedOffice, closeForm, createOr
             <Form onSubmit={handleSubmit} autoCpmplete='off'>
                 <Form.Input placeholder='Name' value={office.name} name='name' onChange={handleInputChange} />
                 <Form.Input placeholder='Address' value={office.address} name='address' onChange={handleInputChange} />
-                <Form.Input placeholder='PhoneNumber' value={office.phoneNumber} name='phoneNumber' onChange={handleInputChange} />
-                <Form.Input placeholder='CompanyId' value={office.companyId} name='companyId' onChange={handleInputChange} />
+                <Form.Input type="tel" placeholder='PhoneNumber' value={office.phoneNumber} name='phoneNumber' onChange={handleInputChange} />
+                <Form.Input type="number" placeholder='CompanyId' value={office.companyId} name='companyId' onChange={handleInputChange} />
                 <Button floated="right" positive type="submit" content='Submit' />
                 <Button onClick={closeForm} floated="right" type="button" content='Cancel' />
             </Form>
