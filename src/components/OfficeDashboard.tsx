@@ -13,14 +13,19 @@ interface Props {
     editMode: boolean;
     openForm: (id: number) => void;
     closeForm: () => void;
+    createOrEdit: (office: Office) => void;
+    deleteOffice: (id: number) => void;
 }
 
 export default function OfficeDashboard({offices, selectedOffice, 
-        selectOffice, cancelSelectOffice, editMode, openForm, closeForm}: Props){
+        selectOffice, cancelSelectOffice, editMode, openForm, closeForm, createOrEdit, deleteOffice}: Props){
     return(
         <Grid>
             <Grid.Column width='10'>
-                <OfficeList offices={offices} selectOffice={selectOffice}/>
+                <OfficeList offices={offices} 
+                    selectOffice={selectOffice}
+                    deleteOffice={deleteOffice}
+                />
             </Grid.Column>
             <Grid.Column width='6'>
                 {selectedOffice && !editMode &&
@@ -30,7 +35,7 @@ export default function OfficeDashboard({offices, selectedOffice,
                     openForm={openForm}
                 />}
                 {editMode &&
-                <OfficeForm closeForm={closeForm} office={selectedOffice}/>}
+                <OfficeForm closeForm={closeForm} office={selectedOffice} createOrEdit={createOrEdit}/>}
             </Grid.Column>
         </Grid>
     )

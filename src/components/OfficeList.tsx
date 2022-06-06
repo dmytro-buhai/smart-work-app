@@ -5,9 +5,10 @@ import '../styles/officeList.css';
 interface Props {
     offices: Office[];
     selectOffice: (id: number) => void;
+    deleteOffice: (id: number) => void;
 }
 
-function OfficeList({offices, selectOffice}: Props){
+function OfficeList({offices, selectOffice, deleteOffice}: Props){
     return(
         <Segment>
             <Item.Group divided>
@@ -22,6 +23,7 @@ function OfficeList({offices, selectOffice}: Props){
                             </Item.Description>
                             <Item.Extra>
                                 <Button onClick={() => selectOffice(office.id)} floated='right' content='View' color='blue' />
+                                <Button onClick={() => deleteOffice(office.id)} floated='right' content='Delete' color='red' />
                                 <Label basic content={office.isFavourite.toString()} />
                             </Item.Extra>
                         </Item.Content>

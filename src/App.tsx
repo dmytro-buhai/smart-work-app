@@ -40,6 +40,18 @@ function App() {
     setEditMode(false);
   }
 
+  function handleCreateOrEditOffice(office: Office){
+    office.id 
+    ? setOffices([...offices.filter(x => x.id !== office.id), office])
+    : setOffices([...offices, office]);
+    setEditMode(false);
+    setSelectedOffice(office);
+  }
+
+  function handleDeleteOffice(id: number){
+    setOffices([...offices.filter(x => x.id !== id)]);
+  }
+
   return (
     <>
       <NavBar openForm={handleFormOpen}/>
@@ -52,6 +64,8 @@ function App() {
           editMode={editMode}
           openForm={handleFormOpen}
           closeForm={handleFormClose}
+          createOrEdit={handleCreateOrEditOffice}
+          deleteOffice={handleDeleteOffice}
         />
       </Container> 
     </>
