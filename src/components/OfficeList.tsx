@@ -1,3 +1,4 @@
+import { SyntheticEvent, useState } from 'react';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { Office } from '../models/office';
 import '../styles/officeList.css';
@@ -6,9 +7,17 @@ interface Props {
     offices: Office[];
     selectOffice: (id: number) => void;
     deleteOffice: (id: number) => void;
+    submitting: boolean;
 }
 
-function OfficeList({offices, selectOffice, deleteOffice}: Props){
+function OfficeList({offices, selectOffice, deleteOffice, submitting}: Props){
+    const[target, setTarget] = useState(0);
+
+    function handleOfficeDelete(e: SyntheticEvent<HTMLButtonElement>, id: number){
+        setTarget(+e.currentTarget.name);
+        deleteOffice(id);
+    }
+
     return(
         <Segment>
             <Item.Group divided>
@@ -23,7 +32,14 @@ function OfficeList({offices, selectOffice, deleteOffice}: Props){
                             </Item.Description>
                             <Item.Extra>
                                 <Button onClick={() => selectOffice(office.id)} floated='right' content='View' color='blue' />
-                                <Button onClick={() => deleteOffice(office.id)} floated='right' content='Delete' color='red' />
+                                <Button
+                                    name={office.id}
+                                    loading={submitting && target === office.id}
+                                    onClick={(e) => handleOfficeDelete(e, office.id)} 
+                                    floated='right' 
+                                    content='Delete' 
+                                    color='red' 
+                                />
                                 {office.isFavourite && 
                                     <Button type="button" color='yellow' content='⭐' />
                                 }

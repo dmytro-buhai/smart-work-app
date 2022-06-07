@@ -27,6 +27,7 @@ export default function OfficeDashboard({offices, selectedOffice, deleteOffice,
                 <OfficeList offices={offices} 
                     selectOffice={selectOffice}
                     deleteOffice={deleteOffice}
+                    submitting={submitting}
                 />
             </Grid.Column>
             <Grid.Column width='6'>

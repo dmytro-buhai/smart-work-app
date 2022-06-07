@@ -41,7 +41,7 @@ const Offices = {
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
     create: (office: AddOfficeDTO) => requests.post<string>('Office/Add', office),
     update: (office: UpdateOfficeDTO) => requests.put<string>('Office/Update', office),
-    delete: (id: number) => requests.del<string>(`Office/Delete${id}`),
+    delete: (id: number) => requests.del<string>(`Office/Delete/${id}`),
 }
 
 const agent = {
