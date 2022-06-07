@@ -1,15 +1,12 @@
+import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Office } from "../models/office";
+import { useStore } from "../stores/store";
 
-interface Props{
-    office: Office | undefined;
-    closeForm: () => void;
-    createOrEdit: (office: Office) => void;
-    submitting: boolean;
-}
+export default observer(function OfficeForm(){
 
-export default function OfficeForm({office : selectedOffice, closeForm, createOrEdit, submitting}: Props){
+    const {officeStore} = useStore();
+    const {selectedOffice, closeForm, createOffice, updateOffice, loading} = officeStore;
 
     const initialState = selectedOffice ?? {
         id: 0,
@@ -26,7 +23,7 @@ export default function OfficeForm({office : selectedOffice, closeForm, createOr
     const[office, setOffice] = useState(initialState);
 
     function handleSubmit() {
-        createOrEdit(office);
+        office.id? updateOffice(office) : createOffice(office);
     }
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -41,9 +38,9 @@ export default function OfficeForm({office : selectedOffice, closeForm, createOr
                 <Form.Input placeholder='Address' value={office.address} name='address' onChange={handleInputChange} />
                 <Form.Input type="tel" placeholder='PhoneNumber' value={office.phoneNumber} name='phoneNumber' onChange={handleInputChange} />
                 <Form.Input type="number" placeholder='CompanyId' value={office.companyId} name='companyId' onChange={handleInputChange} />
-                <Button loading={submitting} floated="right" positive type="submit" content='Submit' />
+                <Button loading={loading} floated="right" positive type="submit" content='Submit' />
                 <Button onClick={closeForm} floated="right" type="button" content='Cancel' />
             </Form>
         </Segment>
     )
-}
+})

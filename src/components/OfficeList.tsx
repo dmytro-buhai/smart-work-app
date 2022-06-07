@@ -1,16 +1,14 @@
+import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useState } from 'react';
-import { Button, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Item, Segment } from 'semantic-ui-react';
 import { Office } from '../models/office';
+import { useStore } from '../stores/store';
 import '../styles/officeList.css';
 
-interface Props {
-    offices: Office[];
-    selectOffice: (id: number) => void;
-    deleteOffice: (id: number) => void;
-    submitting: boolean;
-}
+export default observer(function OfficeList(){
+    const {officeStore} = useStore();
+    const {deleteOffice, officesById, loading} = officeStore;
 
-function OfficeList({offices, selectOffice, deleteOffice, submitting}: Props){
     const[target, setTarget] = useState(0);
 
     function handleOfficeDelete(e: SyntheticEvent<HTMLButtonElement>, id: number){
@@ -21,7 +19,7 @@ function OfficeList({offices, selectOffice, deleteOffice, submitting}: Props){
     return(
         <Segment>
             <Item.Group divided>
-                {offices.map((office: Office) => (
+                {officesById.map((office: Office) => (
                     <Item key={office.id}>
                         <Item.Content>
                             <Item.Header as='a'>{office.name}</Item.Header>
@@ -31,10 +29,10 @@ function OfficeList({offices, selectOffice, deleteOffice, submitting}: Props){
                                 <div>{office.companyId}</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button onClick={() => selectOffice(office.id)} floated='right' content='View' color='blue' />
+                                <Button onClick={() => officeStore.selectOffice(office.id)} floated='right' content='View' color='blue' />
                                 <Button
                                     name={office.id}
-                                    loading={submitting && target === office.id}
+                                    loading={loading && target === office.id}
                                     onClick={(e) => handleOfficeDelete(e, office.id)} 
                                     floated='right' 
                                     content='Delete' 
@@ -53,6 +51,4 @@ function OfficeList({offices, selectOffice, deleteOffice, submitting}: Props){
             </Item.Group>
         </Segment>      
     )
-}
-
-export default OfficeList;
+})

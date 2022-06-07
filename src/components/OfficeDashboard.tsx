@@ -1,50 +1,27 @@
-import { Grid, GridColumn, List } from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
+import { Grid } from 'semantic-ui-react';
 import OfficeForm from '../forms/OfficeForm';
-import { Office } from '../models/office';
+import { useStore } from '../stores/store';
 import '../styles/officeDashboard.css';
 import OfficeDetails from './OfficeDetails';
 import OfficeList from './OfficeList';
 
-interface Props {
-    offices: Office[];
-    selectedOffice: Office | undefined;
-    selectOffice: (id: number) => void;
-    cancelSelectOffice: () => void;
-    editMode: boolean;
-    openForm: (id: number) => void;
-    closeForm: () => void;
-    createOrEdit: (office: Office) => void;
-    deleteOffice: (id: number) => void;
-    submitting: boolean;
-}
+export default observer(function OfficeDashboard(){
 
-export default function OfficeDashboard({offices, selectedOffice, deleteOffice,
-        selectOffice, cancelSelectOffice, editMode, openForm, 
-        closeForm, createOrEdit, submitting}: Props){
+    const {officeStore} = useStore();
+    const {selectedOffice, editMode} = officeStore;
+
     return(
         <Grid>
             <Grid.Column width='10'>
-                <OfficeList offices={offices} 
-                    selectOffice={selectOffice}
-                    deleteOffice={deleteOffice}
-                    submitting={submitting}
-                />
+                <OfficeList />
             </Grid.Column>
             <Grid.Column width='6'>
                 {selectedOffice && !editMode &&
-                <OfficeDetails 
-                    office={selectedOffice} 
-                    cancelSelectOffice={cancelSelectOffice}
-                    openForm={openForm}
-                />}
+                <OfficeDetails />}
                 {editMode &&
-                <OfficeForm 
-                    closeForm={closeForm} 
-                    office={selectedOffice} 
-                    createOrEdit={createOrEdit}
-                    submitting={submitting}
-                />}
+                <OfficeForm />}
             </Grid.Column>
         </Grid>
     )
-}
+})

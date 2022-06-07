@@ -1,14 +1,13 @@
-import React from "react";
 import { Button, Card, Image } from "semantic-ui-react";
-import { Office } from "../models/office";
+import { useStore } from "../stores/store";
+import LoadingComponent from "./LoadingComponent";
 
-interface Props{
-    office: Office;
-    cancelSelectOffice: () => void;
-    openForm: (id: number) => void;
-}
+export default function OfficeDetails(){
+    const {officeStore} = useStore();
+    const {selectedOffice: office, openForm, cancelSelectedOffice} = officeStore;
 
-export default function OfficeDetails({office, cancelSelectOffice, openForm}: Props){
+    if(!office) return <LoadingComponent/>;
+
     return(
         <Card fluid>
             <Image src={`/assets/${office.photoFileName}.jpg`} wrapped ui={false} />
@@ -24,7 +23,7 @@ export default function OfficeDetails({office, cancelSelectOffice, openForm}: Pr
             <Card.Content extra>
                 <Button.Group widths='2'>
                     <Button onClick={() => openForm(office.id)} basic color="blue" content='Edit' />
-                    <Button onClick={cancelSelectOffice} basic color="grey" content='Cancel' />
+                    <Button onClick={cancelSelectedOffice} basic color="grey" content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>

@@ -1,45 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Office } from './models/office';
 import OfficeDashboard from './components/OfficeDashboard';
 import NavBar from './components/NavBar';
-import { Container } from 'semantic-ui-react';
-import agent from './api/agent';
 import LoadingComponent from './components/LoadingComponent';
 import { AddOfficeDTO } from './models/officeDTOs/addOfficeDTO';
 import { UpdateOfficeDTO } from './models/officeDTOs/updateOfficeDTO';
+import { useStore } from './stores/store';
+import { observer } from 'mobx-react-lite';
+import { Container } from 'semantic-ui-react';
 
 function App() {
-
-  const[offices, setOffices] = useState<Office[]>([]);
-  const[selectedOffice, setSelectedOffice] = useState<Office | undefined>(undefined);
-  const[editMode, setEditMode] = useState(false);
-  const[loading, setLoading] = useState(true);
-  const[submitting, setSubmitting] = useState(false);
+  const {officeStore} = useStore();
 
   useEffect(() => {
-    agent.Offices.list().then(response => {
-      console.log(response);
-      setOffices(response);
-      setLoading(false);
-    })
-  }, [])
-
-  function handleSelectOffice(id: number){
-    setSelectedOffice(offices.find(x => x.id === id))
-  }
-
-  function handleCancelSelectOffice(){
-    setSelectedOffice(undefined)
-  }
-
-  function handleFormOpen(id?: number){
-    id ? handleSelectOffice(id) : handleCancelSelectOffice();
-    setEditMode(true);
-  }
-
-  function handleFormClose() {
-    setEditMode(false);
-  }
+    officeStore.loadOffices();
+  }, [officeStore])
 
   function convertOfficeForCreating(office: Office): AddOfficeDTO{  
     var addOfficeDTO : AddOfficeDTO = {
@@ -71,57 +46,16 @@ function App() {
     return updateOfficeDTO;
   }
 
-  function handleCreateOrEditOffice(office: Office){
-    setSubmitting(true);
-
-    if(office.id) {
-      agent.Offices.update(office).then(() => {
-        setOffices([...offices.filter(x => x.id !== office.id), office]);
-        setSelectedOffice(office);
-        setEditMode(false);
-        setSubmitting(false);
-      })
-    } else {
-      agent.Offices.create(convertOfficeForCreating(office)).then(() => {
-        setOffices([...offices, office]);
-        setSelectedOffice(office);
-        setEditMode(false);
-        setSubmitting(false);
-      })
-    }
-  }
-
-  function handleDeleteOffice(id: number){
-    setSubmitting(true);
-    agent.Offices.delete(id).then(() => {
-      setOffices([...offices.filter(x => x.id !== id)]);
-      setSubmitting(false);
-    })
-
-    
-  }
-
-  if (loading) return <LoadingComponent content='Loading app' />
+  if (officeStore.loadingInitial) return <LoadingComponent content='Loading app' />
 
   return (
     <>
-      <NavBar openForm={handleFormOpen}/>
+      <NavBar />
       <Container style={{marginTop: '7em'}}>
-        <OfficeDashboard 
-          offices = {offices}
-          selectedOffice={selectedOffice}
-          selectOffice={handleSelectOffice} 
-          cancelSelectOffice={handleCancelSelectOffice}
-          editMode={editMode}
-          openForm={handleFormOpen}
-          closeForm={handleFormClose}
-          createOrEdit={handleCreateOrEditOffice}
-          deleteOffice={handleDeleteOffice}
-          submitting={submitting}
-        />
+        <OfficeDashboard />
       </Container> 
     </>
   );
 }
 
-export default App;
+export default observer(App);
