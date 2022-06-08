@@ -1,8 +1,8 @@
-export interface AddOfficeDTO {
-    companyId: number
+export interface Company {
+    id: number
     name: string
     address: string
     phoneNumber: string
+    description: string
     photoFileName: string
-    isFavourite: boolean
 }

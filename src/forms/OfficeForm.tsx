@@ -9,7 +9,7 @@ export default observer(function OfficeForm(){
     const history = useHistory();
     const {officeStore} = useStore();
     const {createOffice, updateOffice, 
-        loading, loadOffice, loadingInitial} = officeStore;
+        loading, loadOffice, loadingInitial, setIsAddedNewOffice} = officeStore;
     const {id} = useParams<{id: string}>();
 
     const[office, setOffice] = useState({
@@ -20,8 +20,15 @@ export default observer(function OfficeForm(){
         phoneNumber: '',
         isFavourite: false,
         photoFileName: 'default_office_photo_file_name',
-        subscribes: [],
-        rooms: []
+        rooms: [],
+        company: {
+            id: 0,
+            name: '',
+            address: '',
+            phoneNumber: '',
+            description: '',
+            photoFileName: 'default_company_photo_file_name',
+        }
     });
 
     useEffect(() => {
@@ -32,7 +39,8 @@ export default observer(function OfficeForm(){
 
     function handleSubmit() {
         if(office.id === 0){
-            createOffice(office).then((officeId) => history.push(`offices/${officeId}`));
+            // ADD office.Company PROPERTY!!!
+            createOffice(office).then((officeId) => {setIsAddedNewOffice(true); history.push(`offices/${officeId}`)});
         } else {
             updateOffice(office).then(() => { history.goBack(); history.push(`offices/${office.id}`) });
         }      

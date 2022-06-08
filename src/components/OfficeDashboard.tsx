@@ -8,13 +8,14 @@ import OfficeList from './OfficeList';
 
 export default observer(function OfficeDashboard(){
     const {officeStore} = useStore();
-    const {loadOffices, officeRegistry} = officeStore;
+    const {loadOffices, officeRegistry, isAddedNewOffice, setIsAddedNewOffice} = officeStore;
 
     useEffect(() => {
-        if(officeRegistry.size <= 1){
+        if(officeRegistry.size <= 1 || isAddedNewOffice){
             loadOffices();
+            setIsAddedNewOffice(false)
         }
-    }, [officeRegistry.size, loadOffices])
+    }, [officeRegistry.size, isAddedNewOffice, setIsAddedNewOffice, loadOffices])
 
     if (officeStore.loadingInitial) return <LoadingComponent content='Loading app' />
 

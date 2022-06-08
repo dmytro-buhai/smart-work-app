@@ -1,55 +1,27 @@
 import { observer } from 'mobx-react-lite';
-import { SyntheticEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Item, Segment } from 'semantic-ui-react';
+import { Fragment } from 'react';
+import { Header } from 'semantic-ui-react';
 import { Office } from '../models/office';
 import { useStore } from '../stores/store';
 import '../styles/officeList.css';
+import OfficeListItem from './OfficeListItem';
 
 export default observer(function OfficeList(){
     const {officeStore} = useStore();
-    const {deleteOffice, officesById, loading} = officeStore;
-
-    const[target, setTarget] = useState(0);
-
-    function handleOfficeDelete(e: SyntheticEvent<HTMLButtonElement>, id: number){
-        setTarget(+e.currentTarget.name);
-        deleteOffice(id);
-    }
+    const {groupedOffices} = officeStore;
 
     return(
-        <Segment>
-            <Item.Group divided>
-                {officesById.map((office: Office) => (
-                    <Item key={office.id}>
-                        <Item.Content>
-                            <Item.Header as='a'>{office.name}</Item.Header>
-                            <Item.Meta>{office.address}</Item.Meta>
-                            <Item.Description>
-                                <div>{office.phoneNumber}</div>
-                                <div>{office.companyId}</div>
-                            </Item.Description>
-                            <Item.Extra>
-                                <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
-                                <Button
-                                    name={office.id}
-                                    loading={loading && target === office.id}
-                                    onClick={(e) => handleOfficeDelete(e, office.id)} 
-                                    floated='right' 
-                                    content='Delete' 
-                                    color='red' 
-                                />
-                                {office.isFavourite && 
-                                    <Button type="button" color='yellow' content='⭐' />
-                                }
-                                {!office.isFavourite && 
-                                    <Button type="button" content='⭐' />
-                                }
-                            </Item.Extra>
-                        </Item.Content>
-                    </Item>
-                ))}
-            </Item.Group>
-        </Segment>      
+        <>
+            {groupedOffices.map(([group, offices]) => (
+                <Fragment key={group}>
+                    <Header block>
+                        {group}
+                    </Header>
+                    {offices.map((office: Office) => (
+                        <OfficeListItem key={office.id} office={office}/>
+                    ))}
+                </Fragment>
+            ))}
+        </> 
     )
 })

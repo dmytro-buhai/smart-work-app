@@ -1,7 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 import { Office } from "../models/office";
-import { AddOfficeDTO } from "../models/officeDTOs/addOfficeDTO";
-import { UpdateOfficeDTO } from "../models/officeDTOs/updateOfficeDTO";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -38,8 +36,8 @@ const pageInfo = {
 const Offices = {
     list: () => requests.get<Office[]>(`/Offices/List/${pageInfo.countItems}`),
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
-    create: (office: AddOfficeDTO) => requests.post<string>('Office/Add', office),
-    update: (office: UpdateOfficeDTO) => requests.put<string>('Office/Update', office),
+    create: (office: Office) => requests.post<string>('Office/Add', office),
+    update: (office: Office) => requests.put<string>('Office/Update', office),
     delete: (id: number) => requests.del<string>(`Office/Delete/${id}`),
 }
 

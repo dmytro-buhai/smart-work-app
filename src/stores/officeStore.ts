@@ -8,6 +8,7 @@ export default class OfficeStore {
     editMode = false;
     loading = false;
     loadingInitial = true;
+    isAddedNewOffice = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -15,6 +16,24 @@ export default class OfficeStore {
 
     get officesById() {
         return Array.from(this.officeRegistry.values()).sort((a, b) => a.id - b.id);
+    }
+
+    get officesByCompany() {
+        return Array.from(this.officeRegistry.values()).sort((a, b) => a.companyId - b.companyId);
+    }
+
+    get groupedOffices() {
+        return Object.entries(
+            this.officesByCompany.reduce((offices, office) => {
+                const companyName = office.company.name
+                offices[companyName] = offices[companyName] ? [...offices[companyName], office] : [office];
+                return offices;
+            }, {} as {[key: string]: Office[]})
+        )
+    }
+
+    setIsAddedNewOffice = (value: boolean) => {
+        this.isAddedNewOffice = value;
     }
 
     loadOffices = async () => {
