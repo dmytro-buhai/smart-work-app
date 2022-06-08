@@ -1,59 +1,31 @@
-import React, { useEffect } from 'react';
-import { Office } from './models/office';
 import OfficeDashboard from './components/OfficeDashboard';
 import NavBar from './components/NavBar';
-import LoadingComponent from './components/LoadingComponent';
-import { AddOfficeDTO } from './models/officeDTOs/addOfficeDTO';
-import { UpdateOfficeDTO } from './models/officeDTOs/updateOfficeDTO';
-import { useStore } from './stores/store';
 import { observer } from 'mobx-react-lite';
 import { Container } from 'semantic-ui-react';
+import { Route, useLocation } from 'react-router-dom';
+import HomePage from './home/HomePage';
+import OfficeForm from './forms/OfficeForm';
+import OfficeDetails from './components/OfficeDetails';
 
 function App() {
-  const {officeStore} = useStore();
-
-  useEffect(() => {
-    officeStore.loadOffices();
-  }, [officeStore])
-
-  function convertOfficeForCreating(office: Office): AddOfficeDTO{  
-    var addOfficeDTO : AddOfficeDTO = {
-      companyId: office.companyId,
-      name: office.name,
-      address: office.address,
-      phoneNumber: office.phoneNumber,
-      photoFileName: office.photoFileName,
-      isFavourite: office.isFavourite,
-    }
-    return addOfficeDTO;
-  }
-
-  function convertOfficeForUpdating(office: Office): UpdateOfficeDTO{  
-    var updateOfficeDTO : UpdateOfficeDTO = {
-      id: office.id,
-      companyId: office.companyId,
-      name: office.name,
-      address: office.address,
-      phoneNumber: office.phoneNumber,
-      photoFileName: office.photoFileName,
-      isFavourite: office.isFavourite,
-      subscribes: office.subscribes,
-      rooms: office.rooms,
-    }
-
-    console.log(updateOfficeDTO);
-
-    return updateOfficeDTO;
-  }
-
-  if (officeStore.loadingInitial) return <LoadingComponent content='Loading app' />
+  const loaction = useLocation();
 
   return (
     <>
-      <NavBar />
-      <Container style={{marginTop: '7em'}}>
-        <OfficeDashboard />
-      </Container> 
+      <Route exact path='/' component={HomePage} />
+      <Route 
+        path={'/(.+)'}
+        render={() => (
+          <>
+            <NavBar />
+            <Container style={{marginTop: '7em'}}>
+              <Route exact path='/offices' component={OfficeDashboard} />
+              <Route path='/offices/:id' component={OfficeDetails} />
+              <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
+            </Container> 
+          </>
+        )}
+      />
     </>
   );
 }

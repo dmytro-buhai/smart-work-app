@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StoreContext.Provider value={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StoreContext.Provider>,
 );
 

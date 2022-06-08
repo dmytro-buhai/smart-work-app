@@ -18,10 +18,11 @@ export default class OfficeStore {
     }
 
     loadOffices = async () => {
+        this.loadingInitial = true;
         try{
             const offices = await agent.Offices.list();
             offices.forEach(office => {
-                this.officeRegistry.set(office.id, office);
+                this.setOffice(office);
             })
             this.setLoadingInitial(false);
         } catch (error){
@@ -30,37 +31,52 @@ export default class OfficeStore {
         }
     }
 
+    loadOffice = async (id: number) => {
+        let office = this.getOffice(id);
+        if(office){
+            this.selectedOffice = office;
+            return office;
+        } else {
+            this.loadingInitial = true;
+            try{
+                office = await agent.Offices.details(id);
+                this.setOffice(office);
+                runInAction(() =>{
+                    this.selectedOffice = office;
+                })
+                this.setLoadingInitial(false);
+                return office;
+            } catch (error) {
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        }
+    }
+
+    private setOffice = (office: Office) => {
+        this.officeRegistry.set(office.id, office);
+    }
+
+    private getOffice = (id: number) => {
+        return this.officeRegistry.get(id);
+    }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
-    }
-
-    selectOffice = (id: number) => {
-        this.selectedOffice = this.officeRegistry.get(id);
-    }
-
-    cancelSelectedOffice = () => {
-        this.selectedOffice = undefined;
-    }
-
-    openForm = (id?: number) => {
-        id? this.selectOffice(id) : this.cancelSelectedOffice();
-        this.editMode = true;
-    }
-
-    closeForm = () => {
-        this.editMode = false;
     }
 
     createOffice = async (office: Office) => {
         this.loading = true;
         try{
-            await agent.Offices.create(office);
+            let id = await agent.Offices.create(office);
             runInAction(() => {
+                office.id = +id;
                 this.officeRegistry.set(office.id, office);
                 this.selectedOffice = office;
                 this.editMode = false;
                 this.loading = false;
             })
+            return +id;
         }catch (error) {
             console.log(error);
             runInAction(() => {
@@ -93,9 +109,6 @@ export default class OfficeStore {
             await agent.Offices.delete(id);
             runInAction(() => {
                 this.officeRegistry.delete(id);
-                if(this.selectedOffice?.id === id) {
-                    this.cancelSelectedOffice();
-                }
                 this.loading = false;
             })
         }catch (error) {

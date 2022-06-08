@@ -1,12 +1,22 @@
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Button, Card, Image } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import LoadingComponent from "./LoadingComponent";
 
-export default function OfficeDetails(){
+export default observer(function OfficeDetails(){
     const {officeStore} = useStore();
-    const {selectedOffice: office, openForm, cancelSelectedOffice} = officeStore;
+    const {selectedOffice: office, loadOffice, loadingInitial} = officeStore;
+    const {id} = useParams<{id: string}>();
 
-    if(!office) return <LoadingComponent/>;
+    useEffect(() => {
+        if (id){
+            loadOffice(+id);
+        }
+    }, [id, loadOffice]);
+
+    if(loadingInitial || !office) return <LoadingComponent/>
 
     return(
         <Card fluid>
@@ -22,10 +32,10 @@ export default function OfficeDetails(){
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths='2'>
-                    <Button onClick={() => openForm(office.id)} basic color="blue" content='Edit' />
-                    <Button onClick={cancelSelectedOffice} basic color="grey" content='Cancel' />
+                    <Button as={Link} to={`/manage/${office.id}`} basic color="blue" content='Edit' />
+                    <Button as={Link} to='/offices' basic color="grey" content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>
     )
-}
+})

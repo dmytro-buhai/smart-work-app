@@ -1,24 +1,19 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Menu } from "semantic-ui-react";
-import { useStore } from "../stores/store";
-
-
 
 export default function NavBar(){
-
-    const {officeStore} = useStore();
-
     return(
         <Menu inverted fixed="top">
             <Container>
-                <Menu.Item header>
+                <Menu.Item as={NavLink} to='/' exact header>
                     <img src="/assets/logo.png" alt="logo"/>
                     SmartWork
                 </Menu.Item>
-                <Menu.Item name="Discover" />
+                <Menu.Item as={NavLink} to='/offices' name="Discover" />
                 <Menu.Item name="Companies" />
                 <Menu.Item>
-                    <Button onClick={() => officeStore.openForm()} positive content='Create office' />
+                    <Button as={NavLink} to='/addOffice' positive content='Add office' />
                 </Menu.Item>
                 <Menu.Menu position='right'>
                     <Menu.Item name="Account" />

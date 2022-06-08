@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Item, Segment } from 'semantic-ui-react';
 import { Office } from '../models/office';
 import { useStore } from '../stores/store';
@@ -29,7 +30,7 @@ export default observer(function OfficeList(){
                                 <div>{office.companyId}</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button onClick={() => officeStore.selectOffice(office.id)} floated='right' content='View' color='blue' />
+                                <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
                                 <Button
                                     name={office.id}
                                     loading={loading && target === office.id}

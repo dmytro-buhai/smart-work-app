@@ -1,15 +1,22 @@
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
-import OfficeForm from '../forms/OfficeForm';
 import { useStore } from '../stores/store';
 import '../styles/officeDashboard.css';
-import OfficeDetails from './OfficeDetails';
+import LoadingComponent from './LoadingComponent';
 import OfficeList from './OfficeList';
 
 export default observer(function OfficeDashboard(){
-
     const {officeStore} = useStore();
-    const {selectedOffice, editMode} = officeStore;
+    const {loadOffices, officeRegistry} = officeStore;
+
+    useEffect(() => {
+        if(officeRegistry.size <= 1){
+            loadOffices();
+        }
+    }, [officeRegistry.size, loadOffices])
+
+    if (officeStore.loadingInitial) return <LoadingComponent content='Loading app' />
 
     return(
         <Grid>
@@ -17,10 +24,7 @@ export default observer(function OfficeDashboard(){
                 <OfficeList />
             </Grid.Column>
             <Grid.Column width='6'>
-                {selectedOffice && !editMode &&
-                <OfficeDetails />}
-                {editMode &&
-                <OfficeForm />}
+                <h2>Office filters</h2>
             </Grid.Column>
         </Grid>
     )

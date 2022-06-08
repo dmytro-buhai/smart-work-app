@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import { resolve } from "path";
 import { Office } from "../models/office";
 import { AddOfficeDTO } from "../models/officeDTOs/addOfficeDTO";
 import { UpdateOfficeDTO } from "../models/officeDTOs/updateOfficeDTO";
