@@ -46,8 +46,6 @@ export default observer(function OfficeDetaledHeader({office}: Props) {
                 </Segment>
             </Segment>
             <Segment clearing attached='bottom'>
-                <Button color='teal'>Subscribe</Button>
-                <Button>Unsubscribe</Button>
                 <Button color='orange' floated='right'>
                     Manage Office
                 </Button>
