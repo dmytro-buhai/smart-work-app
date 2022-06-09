@@ -18,7 +18,7 @@ function App() {
         render={() => (
           <>
             <NavBar />
-            <Container style={{marginTop: '7em'}}>
+            <Container style={{paddingTop: '7em'}}>
               <Route exact path='/offices' component={OfficeDashboard} />
               <Route path='/offices/:id' component={OfficeDetails} />
               <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />

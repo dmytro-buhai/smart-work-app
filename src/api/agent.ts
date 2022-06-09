@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
+import { DetailStatistic } from "../models/detailStatistic";
 import { Office } from "../models/office";
+import { Statistic } from "../models/statistic";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -30,7 +32,7 @@ const requests ={
 }
 
 const pageInfo = {
-    countItems: 10
+    countItems: 100
 }
 
 const Offices = {
@@ -41,8 +43,16 @@ const Offices = {
     delete: (id: number) => requests.del<string>(`Office/Delete/${id}`),
 }
 
+const Statistics = {
+    list: () => requests.post<Statistic[]>(`/Statistics/List`, pageInfo),
+    listByRoom: (roomId: number) => requests.get<DetailStatistic[]>(`/Statistic/GetByRoomId/${roomId}`),
+    details: (id: number) => requests.get<DetailStatistic>(`/Statistic/FindById/${id}`),
+    attendanceList: (roomId: number) => requests.get<Statistic[]>(`/AttendanceStatistic/List/${roomId}`)
+}
+
 const agent = {
-    Offices
+    Offices,
+    Statistics
 }
 
 export default agent;
