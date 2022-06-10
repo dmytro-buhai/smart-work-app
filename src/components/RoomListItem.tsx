@@ -18,7 +18,7 @@ export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
     
     const {statisticStore} = useStore();
-    const {loadStatisticsForRoom, loading, currentSelectedStatistic} = statisticStore;
+    const {loadStatisticsForRoom, loading, selectedRoomId, currentSelectedStatistic} = statisticStore;
     const [target, setTarget] = useState(0);
 
     function handleRoomViewStatistic(event: React.MouseEvent<HTMLButtonElement>, id: number){
@@ -66,7 +66,6 @@ export default observer(function RoomListItem({room,
                             <Button
                                 key={room.id}
                                 name={room.id}
-                                loading={loading && target === room.id}
                                 onClick={(event) => handleRoomViewStatistic(event, room.id)} 
                                 floated='right' 
                                 content='View statistics' 
@@ -76,9 +75,14 @@ export default observer(function RoomListItem({room,
                     </Segment>
                 </Segment.Group> 
             </Grid.Column>
+
             <Grid.Column width={6}>
-                <OfficeDetaledSidebar selectedStatistic={currentSelectedStatistic} />
+                <OfficeDetaledSidebar 
+                    isCanBeShown={selectedRoomId !== undefined && selectedRoomId === room.id}
+                    selectedStatistic={currentSelectedStatistic} 
+                />
             </Grid.Column>
+            
         </Grid>
     )
 })

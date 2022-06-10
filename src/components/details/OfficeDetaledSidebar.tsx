@@ -1,13 +1,18 @@
 import { observer } from "mobx-react-lite"
 import { Segment } from "semantic-ui-react"
 import { DetailStatistic } from "../../models/detailStatistic"
+import LoadingComponent from "../LoadingComponent"
 import AttendanceStatistic from "../statistic/AttendanceStatistic"
 
 interface Props{
-    selectedStatistic: DetailStatistic | undefined
+    selectedStatistic: DetailStatistic | undefined;
+    isCanBeShown: boolean;
 }
 
-export default observer(function OfficeDetaledSidebar({selectedStatistic}: Props) {
+export default observer(function OfficeDetaledSidebar({selectedStatistic, isCanBeShown}: Props) {
+
+    if(!isCanBeShown) return <></>
+
     return(
         <>
             <Segment
@@ -18,13 +23,18 @@ export default observer(function OfficeDetaledSidebar({selectedStatistic}: Props
                 inverted
                 color='teal'
             >
+                Statistic for
                 {selectedStatistic && 
-                    <h5>{selectedStatistic.description}</h5>
+                    <h5>{selectedStatistic.type}</h5>
                 }
-                Statistic
             </Segment>
             <Segment attached>
-                <AttendanceStatistic statistic={undefined} />
+                {selectedStatistic === undefined && 
+                    <h5>Moving to selected room...</h5>
+                }
+                {selectedStatistic && 
+                    <AttendanceStatistic statistic={undefined} />
+                }
             </Segment>
         </>
     )

@@ -8,6 +8,7 @@ export default class StatisticStore {
     statisticRegistry = new Map<number, DetailStatistic>();
     subscribeDetailsRegistry = new Map<number, SubscribeDetails>();
     selectedStatistic: DetailStatistic | undefined = undefined;
+    selectedRoomId: number | undefined;
     loadingInitial = true;
     loading = false;
     loadingSubscribeDetails = true;
@@ -50,6 +51,7 @@ export default class StatisticStore {
                 this.setDetailStatistic(statistic);
             })
             this.setSelectedStatisticDetals(detailedStatistics.at(0))
+            this.selectedRoomId = roomId;
             this.setLoading(false);
         } catch (error){
             console.log(error);
