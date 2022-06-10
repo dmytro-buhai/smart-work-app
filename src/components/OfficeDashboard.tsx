@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
+import { Grid, Loader } from 'semantic-ui-react';
+import { PagingParams } from '../models/pagination';
 import { useStore } from '../stores/store';
 import '../styles/officeDashboard.css';
 import LoadingComponent from './LoadingComponent';
@@ -9,7 +11,15 @@ import OfficeList from './OfficeList';
 
 export default observer(function OfficeDashboard(){
     const {officeStore} = useStore();
-    const {loadOffices, officeRegistry, isAddedNewOffice, setIsAddedNewOffice} = officeStore;
+    const {loadOffices, officeRegistry, 
+           isAddedNewOffice, setIsAddedNewOffice, setPagingParams, pagination} = officeStore;
+    const [loadingNext, setLoadingNext] = useState(false);
+
+    function handleGetNext() {
+        setLoadingNext(true);
+        setPagingParams(new PagingParams(pagination!.currentPage + 1))
+        loadOffices().then(() => setLoadingNext(false));
+    }
 
     useEffect(() => {
         if(officeRegistry.size <= 1 || isAddedNewOffice){
@@ -18,15 +28,25 @@ export default observer(function OfficeDashboard(){
         }
     }, [officeRegistry.size, isAddedNewOffice, setIsAddedNewOffice, loadOffices])
 
-    if (officeStore.loadingInitial) return <LoadingComponent content='Loading app' />
+    if (officeStore.loadingInitial && !loadingNext) return <LoadingComponent content='Loading app' />
 
     return(
         <Grid>
             <Grid.Column width='10'>
-                <OfficeList />
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={handleGetNext}
+                    hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
+                    initialLoad={false}
+                >
+                    <OfficeList />
+                </InfiniteScroll>
             </Grid.Column>
             <Grid.Column width='6'>
                 <OfficeFilters />
+            </Grid.Column>
+            <Grid.Column width='10'>
+                <Loader active={loadingNext} />
             </Grid.Column>
         </Grid>
     )

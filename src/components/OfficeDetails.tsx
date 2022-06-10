@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Grid } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import OfficeDetaledHeader from "./details/OfficeDetaledHeader";
@@ -26,12 +25,13 @@ export default observer(function OfficeDetails(){
             }
             if(errorResult !== undefined){
                 const {data, status} = errorResult.response!
+                console.log(data);
                 if(status === 400 || status === 404){
                     history.push('/not-found')
                 }
             }
         }
-    }, [id, office, loadingInitial, loadOffice, loadSubscribeDetailsForRooms]);
+    }, [id, office, loadingInitial, loadOffice, errorResult, history, loadSubscribeDetailsForRooms]);
 
     if(loadingInitial || !office) return <LoadingComponent/>
 

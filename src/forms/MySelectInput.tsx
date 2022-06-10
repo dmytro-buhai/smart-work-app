@@ -1,6 +1,5 @@
 import { useField } from "formik";
 import { Form, Label, Select } from "semantic-ui-react";
-import { CompanyOptions } from "../models/companyOptions";
 
 interface Props{
     placeholder: string;

@@ -1,9 +1,8 @@
-import { ErrorMessage, Formik } from 'formik';
-import { values } from 'mobx';
+import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { Button, Form, Header, Label, Segment } from "semantic-ui-react";
+import { Button, Form, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from '../components/LoadingComponent';
 import { useStore } from "../stores/store";
 import * as Yup from 'yup';

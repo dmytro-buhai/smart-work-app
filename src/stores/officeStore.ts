@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { Company } from "../models/company";
 import { CompanyOptions } from "../models/companyOptions";
 import { Office } from "../models/office";
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class OfficeStore {
     companyRegistry = new Map<number, Company>();
@@ -13,9 +14,22 @@ export default class OfficeStore {
     loadingInitial = true;
     isAddedNewOffice = false;
     errorResult: any | undefined;
+    pagination: Pagination | null = null;
+    pagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        return params;
     }
 
     get companies() {
@@ -51,16 +65,21 @@ export default class OfficeStore {
     loadOffices = async () => {
         this.loadingInitial = true;
         try{
-            const offices = await agent.Offices.list();
-            offices.forEach(office => {
+            const result = await agent.Offices.list(this.axiosParams);
+            result.data.forEach(office => {
                 this.setOffice(office);
                 this.setCompany(office.company);
             })
+            this.setPagination(result.pagination)
             this.setLoadingInitial(false);
         } catch (error: any){
             console.log(error.response.data);
             this.setLoadingInitial(false);
         }
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
     }
 
     loadOffice = async (id: number) => {

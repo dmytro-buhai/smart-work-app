@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { Company } from "../models/company";
 import { DetailStatistic } from "../models/detailStatistic";
 import { Office } from "../models/office";
+import { PaginatedResult } from "../models/pagination";
 import { Statistic } from "../models/statistic";
 import { SubscribeDetails } from "../models/subscribeDetails";
 
@@ -16,13 +17,16 @@ axios.defaults.baseURL = 'https://localhost:5001/api';
 
 axios.interceptors.response.use(async response => {
     await sleep(1000);
-    console.log(response);
+    const pagination = response.headers['pagination'];
+    if(pagination){
+        response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+        return response as AxiosResponse<PaginatedResult<any>>
+    }
     return response;
 }, (error: AxiosError) => {
     const {data, status} = error.response!;
     switch (status) {
         case 400:
-            console.log("HERE!!!!!!!!!!!!!!!!!!!!!!!!!1")
             if(!(data as any).errors) {
                 console.log((data as any).errors)
                 const modalStateErrors = [];
@@ -69,7 +73,8 @@ const Companies = {
 }
 
 const Offices = {
-    list: () => requests.get<Office[]>(`/Offices/List/${pageInfo.countItems}`),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Office[]>>('Offices/List', {params})
+        .then(responseBody),
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
     create: (office: Office) => requests.post<string>('Office/Add', office),
     update: (office: Office) => requests.put<string>('Office/Update', office),
