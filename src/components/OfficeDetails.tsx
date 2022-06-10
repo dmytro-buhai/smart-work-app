@@ -6,19 +6,23 @@ import { useStore } from "../stores/store";
 import OfficeDetaledHeader from "./details/OfficeDetaledHeader";
 import OfficeDetaledInfo from "./details/OfficeDetaledInfo";
 import OfficeDetaledRooms from "./details/OfficeDetaledRooms";
-import OfficeDetaledSidebar from "./details/OfficeDetaledSidebar";
 import LoadingComponent from "./LoadingComponent";
 
 export default observer(function OfficeDetails(){
     const {officeStore} = useStore();
+    const {statisticStore} = useStore();
     const {selectedOffice: office, loadOffice, loadingInitial} = officeStore;
+    const {loadSubscribeDetailsForRooms} = statisticStore;
     const {id} = useParams<{id: string}>();
 
     useEffect(() => {
         if (id){
             loadOffice(+id);
+            if(!loadingInitial){
+                loadSubscribeDetailsForRooms(office?.rooms);
+            }
         }
-    }, [id, loadOffice]);
+    }, [id, office, loadingInitial, loadOffice, loadSubscribeDetailsForRooms]);
 
     if(loadingInitial || !office) return <LoadingComponent/>
 
@@ -27,10 +31,10 @@ export default observer(function OfficeDetails(){
             <Grid.Column width={10}>
                 <OfficeDetaledHeader office={office}/>
                 <OfficeDetaledInfo office={office}/>
-                <OfficeDetaledRooms rooms={office.rooms}/>
+                
             </Grid.Column>
-            <Grid.Column width={6}>
-                <OfficeDetaledSidebar office={office}/>
+            <Grid.Column width={16}>
+                <OfficeDetaledRooms rooms={office.rooms} />
             </Grid.Column>
         </Grid>
     )

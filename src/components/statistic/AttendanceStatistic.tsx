@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Statistic } from "../../models/statistic";
-import { Header, Icon, Image, Table } from "semantic-ui-react"
+import { Header, Icon, Table } from "semantic-ui-react"
 
 interface Props{
     statistic: Statistic | undefined

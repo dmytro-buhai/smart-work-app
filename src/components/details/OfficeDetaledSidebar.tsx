@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite"
 import { Segment } from "semantic-ui-react"
-import { Office } from "../../models/office"
+import { DetailStatistic } from "../../models/detailStatistic"
 import AttendanceStatistic from "../statistic/AttendanceStatistic"
 
 interface Props{
-    office: Office
+    selectedStatistic: DetailStatistic | undefined
 }
 
-export default observer(function OfficeDetaledSidebar({office}: Props) {
+export default observer(function OfficeDetaledSidebar({selectedStatistic}: Props) {
     return(
         <>
             <Segment
@@ -18,6 +18,9 @@ export default observer(function OfficeDetaledSidebar({office}: Props) {
                 inverted
                 color='teal'
             >
+                {selectedStatistic && 
+                    <h5>{selectedStatistic.description}</h5>
+                }
                 Statistic
             </Segment>
             <Segment attached>

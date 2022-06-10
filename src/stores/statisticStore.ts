@@ -9,10 +9,15 @@ export default class StatisticStore {
     subscribeDetailsRegistry = new Map<number, SubscribeDetails>();
     selectedStatistic: DetailStatistic | undefined = undefined;
     loadingInitial = true;
+    loading = false;
     loadingSubscribeDetails = true;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    get currentSelectedStatistic() {
+        return this.selectedStatistic;
     }
 
     get statistics(){
@@ -36,13 +41,19 @@ export default class StatisticStore {
     }
 
     loadStatisticsForRoom = async (roomId: number) => {
+        this.setLoading(true);
+        this.setSelectedStatisticDetals(undefined);
+        console.log(`current room id: ${roomId}`)
         try{
             const detailedStatistics = await agent.Statistics.listByRoom(roomId);
             detailedStatistics.forEach(statistic => {
                 this.setDetailStatistic(statistic);
             })
+            this.setSelectedStatisticDetals(detailedStatistics.at(0))
+            this.setLoading(false);
         } catch (error){
             console.log(error);
+            this.setLoading(false);
         }
     }
 
@@ -83,8 +94,17 @@ export default class StatisticStore {
         this.loadingInitial = state;
     }
 
+    setLoading = (state: boolean) => {
+        this.loading = state;
+    }
+
     setLoadingSubscribeDetails = (state: boolean) => {
         this.loadingSubscribeDetails = state;
+    }
+
+    setSelectedStatisticDetals = (statisticDetals: DetailStatistic | undefined) => {
+        console.log(`current stat id: ${statisticDetals?.id}`)
+        this.selectedStatistic = statisticDetals;
     }
 
     private getDetailStatistic = (id: number) => {
