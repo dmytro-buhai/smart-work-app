@@ -44,9 +44,7 @@ export default observer(function OfficeForm(){
         address: Yup.string().required('The office address is required')
                 .matches(/^[A-Za-z0-9]+(?:\s[A-Za-z0-9',/_-]+)+$/g,
                 "Please, specify a valid address, for example, Correct address, 54 or Correct address, 54/2"),
-        companyId: Yup.string()
-                .matches(/^Company$/g, 
-                'The office company is required'),
+        companyId: Yup.string().required('The office company is required'),
         phoneNumber: Yup.string()
                 .required('The office phone number is required')
                 .matches(/^0\d{9}$/g, 

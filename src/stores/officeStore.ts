@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx"
+import { makeAutoObservable, reaction, runInAction } from "mobx"
 import agent from "../api/agent";
 import { Company } from "../models/company";
 import { CompanyOptions } from "../models/companyOptions";
@@ -16,19 +16,54 @@ export default class OfficeStore {
     errorResult: any | undefined;
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
+    predicate = new Map().set('all', true);
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+
+        reaction(
+            () => this.predicate.keys(),
+            () => {
+                this.pagingParams = new PagingParams();
+                this.officeRegistry.clear();
+                console.log(this.officeRegistry);
+                this.loadOffices();
+            }
+        )
     }
 
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
     }
 
+    setPredicate = (predicate: string, value: string) => {
+        const resetPredicate = () => {
+            this.predicate.forEach((value, key) => {
+                this.predicate.delete(key);
+            })
+        }   
+
+        console.log(predicate)
+
+        switch(predicate){
+            case 'all':
+                resetPredicate();
+                this.predicate.set('all', true);
+                break;
+            case 'isFavourite':
+                resetPredicate();
+                this.predicate.set('isFavourite', true);
+                break;
+        }
+    }
+
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
+        this.predicate.forEach((value, key) => {
+            params.append(key, value);
+        })
         return params;
     }
 
@@ -66,6 +101,7 @@ export default class OfficeStore {
         this.loadingInitial = true;
         try{
             const result = await agent.Offices.list(this.axiosParams);
+            console.log(result);
             result.data.forEach(office => {
                 this.setOffice(office);
                 this.setCompany(office.company);
