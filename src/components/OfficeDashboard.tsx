@@ -4,6 +4,7 @@ import { Grid } from 'semantic-ui-react';
 import { useStore } from '../stores/store';
 import '../styles/officeDashboard.css';
 import LoadingComponent from './LoadingComponent';
+import OfficeFilters from './OfficeFilters';
 import OfficeList from './OfficeList';
 
 export default observer(function OfficeDashboard(){
@@ -25,7 +26,7 @@ export default observer(function OfficeDashboard(){
                 <OfficeList />
             </Grid.Column>
             <Grid.Column width='6'>
-                <h2>Office filters</h2>
+                <OfficeFilters />
             </Grid.Column>
         </Grid>
     )

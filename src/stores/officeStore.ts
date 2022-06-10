@@ -44,8 +44,8 @@ export default class OfficeStore {
                 this.setOffice(office);
             })
             this.setLoadingInitial(false);
-        } catch (error){
-            console.log(error);
+        } catch (error: any){
+            console.log(error.response.data);
             this.setLoadingInitial(false);
         }
     }
