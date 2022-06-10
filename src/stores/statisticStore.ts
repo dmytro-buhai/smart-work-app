@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { DetailStatistic } from "../models/detailStatistic";
 import { Room } from "../models/room";
@@ -7,7 +7,7 @@ import { SubscribeDetails } from "../models/subscribeDetails";
 export default class StatisticStore {
     statisticRegistry = new Map<number, DetailStatistic>();
     subscribeDetailsRegistry = new Map<number, SubscribeDetails>();
-    selectedStatistic: DetailStatistic | undefined = undefined;
+    selectedStatistic: DetailStatistic[] | undefined = undefined;
     selectedRoomId: number | undefined;
     loadingInitial = true;
     loading = false;
@@ -43,38 +43,30 @@ export default class StatisticStore {
 
     loadStatisticsForRoom = async (roomId: number) => {
         this.setLoading(true);
-        this.setSelectedStatisticDetals(undefined);
-        console.log(`current room id: ${roomId}`)
-        try{
-            const detailedStatistics = await agent.Statistics.listByRoom(roomId);
-            detailedStatistics.forEach(statistic => {
-                this.setDetailStatistic(statistic);
-            })
-            this.setSelectedStatisticDetals(detailedStatistics.at(0))
-            this.selectedRoomId = roomId;
-            this.setLoading(false);
-        } catch (error){
-            console.log(error);
-            this.setLoading(false);
-        }
-    }
+        this.setSelectedStatisticDetails(undefined);
 
-    loadSelectedStatistic = async (id: number) => {
-        let detailStatistic = this.getDetailStatistic(id);
-        if(detailStatistic){
-            this.selectedStatistic = detailStatistic;
-            return detailStatistic;
+        let data = this.statistics.filter(s => s.roomId === roomId)
+
+        console.log(data);
+
+        if (data.length > 0){
+            this.setSelectedStatisticDetails(data)
+            this.setSelectedRoomId(roomId);
+            this.setLoading(false);
+
         } else {
             try{
-                detailStatistic = await agent.Statistics.details(id);
-                this.setDetailStatistic(detailStatistic);
-                runInAction(() =>{
-                    this.selectedStatistic = detailStatistic;
+                const detailedStatistics = await agent.Statistics.listByRoom(roomId);
+                detailedStatistics.forEach(statistic => {
+                    console.log(statistic?.description)
+                    this.setDetailStatistic(statistic);
                 })
-                
-                return detailStatistic;
-            } catch (error) {
+                this.setSelectedStatisticDetails(detailedStatistics)
+                this.setSelectedRoomId(roomId);
+                this.setLoading(false);
+            } catch (error){
                 console.log(error);
+                this.setLoading(false);
             }
         }
     }
@@ -104,9 +96,12 @@ export default class StatisticStore {
         this.loadingSubscribeDetails = state;
     }
 
-    setSelectedStatisticDetals = (statisticDetals: DetailStatistic | undefined) => {
-        console.log(`current stat id: ${statisticDetals?.id}`)
+    setSelectedStatisticDetails = (statisticDetals: DetailStatistic[] | undefined) => {
         this.selectedStatistic = statisticDetals;
+    }
+
+    setSelectedRoomId = (roomId: number | undefined) => {
+        this.selectedRoomId = roomId
     }
 
     private getDetailStatistic = (id: number) => {

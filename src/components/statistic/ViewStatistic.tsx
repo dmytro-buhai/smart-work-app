@@ -1,18 +1,18 @@
 import { observer } from "mobx-react-lite";
-import { Statistic } from "../../models/statistic";
 import { Header, Icon, Table } from "semantic-ui-react"
+import { DetailStatistic } from "../../models/detailStatistic";
 
 interface Props{
-    statistic: Statistic | undefined
+    selectedStatistic: DetailStatistic | undefined
 }
 
-export default observer(function AttendanceStatistic({statistic}: Props) {
+export default observer(function ViewStatistic({selectedStatistic}: Props) {
     return(
         <Table basic='very' celled collapsing>
             <Table.Header>
             <Table.Row>
                 <Table.HeaderCell>Day</Table.HeaderCell>
-                <Table.HeaderCell>Subscriptions for day</Table.HeaderCell>
+                <Table.HeaderCell>Office {selectedStatistic?.type}</Table.HeaderCell>
             </Table.Row>
             </Table.Header>
 

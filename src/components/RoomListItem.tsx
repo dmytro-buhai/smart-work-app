@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react";
 import { Room } from "../models/room";
@@ -18,13 +18,16 @@ export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
     
     const {statisticStore} = useStore();
-    const {loadStatisticsForRoom, loading, selectedRoomId, currentSelectedStatistic} = statisticStore;
-    const [target, setTarget] = useState(0);
+    const {loadStatisticsForRoom, currentSelectedStatistic, selectedRoomId, setSelectedRoomId} = statisticStore;
 
     function handleRoomViewStatistic(event: React.MouseEvent<HTMLButtonElement>, id: number){
         const button: HTMLButtonElement = event.currentTarget;
-        setTarget(+button.name);
+        console.log(button);
         loadStatisticsForRoom(id);
+    }
+
+    function handleClose(){
+        setSelectedRoomId(undefined);
     }
 
     return (  
@@ -75,14 +78,13 @@ export default observer(function RoomListItem({room,
                     </Segment>
                 </Segment.Group> 
             </Grid.Column>
-
-            <Grid.Column width={6}>
-                <OfficeDetaledSidebar 
-                    isCanBeShown={selectedRoomId !== undefined && selectedRoomId === room.id}
-                    selectedStatistic={currentSelectedStatistic} 
-                />
-            </Grid.Column>
-            
+                <Grid.Column width={6}>
+                    <OfficeDetaledSidebar key={room.id}
+                        isCanBeShown={selectedRoomId !== undefined && selectedRoomId === room.id}
+                        selectedStatistic={currentSelectedStatistic} 
+                        handleClose={handleClose}
+                    />
+                </Grid.Column>
         </Grid>
     )
 })
