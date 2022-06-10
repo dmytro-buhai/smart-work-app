@@ -1,16 +1,24 @@
+import { ErrorMessage, Formik } from 'formik';
+import { values } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, Form, Header, Label, Segment } from "semantic-ui-react";
 import LoadingComponent from '../components/LoadingComponent';
 import { useStore } from "../stores/store";
+import * as Yup from 'yup';
+import MyTextInput from './MyTextInput';
+import MySelectInput from './MySelectInput';
+import { CompanyOptions } from '../models/companyOptions';
+import { Office } from '../models/office';
 
 export default observer(function OfficeForm(){
     const history = useHistory();
     const {officeStore} = useStore();
     const {createOffice, updateOffice, 
-        loading, loadOffice, loadingInitial, setIsAddedNewOffice} = officeStore;
+        loading, getCompaniesOptions, loadOffice, loadingInitial, setIsAddedNewOffice} = officeStore;
     const {id} = useParams<{id: string}>();
+    const [compOptions, setCompOptions] = useState<Array<CompanyOptions>>()
 
     const[office, setOffice] = useState({
         id: 0,
@@ -31,38 +39,63 @@ export default observer(function OfficeForm(){
         }
     });
 
+    const validationSchema = Yup.object({
+        name: Yup.string()
+                .required('The office name is required'),
+        address: Yup.string().required('The office address is required')
+                .matches(/^[A-Za-z0-9]+(?:\s[A-Za-z0-9',/_-]+)+$/g,
+                "Please, specify a valid address, for example, Correct address, 54 or Correct address, 54/2"),
+        companyId: Yup.string()
+                .matches(/^Company$/g, 
+                'The office company is required'),
+        phoneNumber: Yup.string()
+                .required('The office phone number is required')
+                .matches(/^0\d{9}$/g, 
+                "Please, specify a valid phone number that starts from 0, for example 0661234567"),
+    })
+
     useEffect(() => {
         if (id) {
-            loadOffice(+id).then(office => setOffice(office!))
+            loadOffice(+id).then(office => setOffice(office!));
         }
-    }, [id, loadOffice]);
+        getCompaniesOptions().then(opts => setCompOptions(opts));
+    }, [id, loadOffice, getCompaniesOptions, setCompOptions]);
 
-    function handleSubmit() {
+    function handleFormSubmit(office: Office) {
+        console.log(office)
         if(office.id === 0){
-            // ADD office.Company PROPERTY!!!
-            createOffice(office).then((officeId) => {setIsAddedNewOffice(true); history.push(`offices/${officeId}`)});
+            createOffice(office).then((officeId) => {setIsAddedNewOffice(true); history.push(`/offices/${officeId}`)});
         } else {
-            updateOffice(office).then(() => { history.goBack(); history.push(`offices/${office.id}`) });
+            updateOffice(office).then(() => { history.push(`/offices/${office.id}`) });
         }      
-    }
-
-    function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-        const {name, value} = event.target;
-        setOffice({...office, [name]: value})
     }
 
     if(loadingInitial) return <LoadingComponent content='Loading office...' />
 
     return(
         <Segment clearing>
-            <Form onSubmit={handleSubmit} autoComplete='off'>
-                <Form.Input placeholder='Name' value={office.name} name='name' onChange={handleInputChange} />
-                <Form.Input placeholder='Address' value={office.address} name='address' onChange={handleInputChange} />
-                <Form.Input type="tel" placeholder='PhoneNumber' value={office.phoneNumber} name='phoneNumber' onChange={handleInputChange} />
-                <Form.Input type="number" placeholder='CompanyId' value={office.companyId} name='companyId' onChange={handleInputChange} />
-                <Button loading={loading} floated="right" positive type="submit" content='Submit' />
-                <Button as={Link} to='/offices' floated="right" type="button" content='Cancel' />
-            </Form>
+            <Header content='Office details' sub color='teal' />
+            <Formik
+                validationSchema={validationSchema}
+                enableReinitialize 
+                initialValues={office} 
+                onSubmit={values => handleFormSubmit(values)}>            
+                {({handleSubmit, isValid, isSubmitting, dirty}) => (
+                    <Form onSubmit={handleSubmit} autoComplete='off'>
+                        <MyTextInput name='id' placeholder='Id' hidden={true}/>
+                        <MyTextInput name='name' placeholder='Name'/>
+                        <MySelectInput name='companyId' options={compOptions!} placeholder='Company' />
+                        <MyTextInput name='address' placeholder='Address' />
+                        <MyTextInput name='phoneNumber' type="tel" placeholder='PhoneNumber' />
+                       
+                        <Button 
+                            disabled={isSubmitting || !dirty || !isValid}
+                            loading={loading} floated="right" 
+                            positive type="submit" content='Submit' />
+                        <Button as={Link} to='/offices' floated="right" type="button" content='Cancel' />
+                    </Form>
+                )}
+            </Formik>
         </Segment>
     )
 })

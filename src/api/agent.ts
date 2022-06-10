@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { Company } from "../models/company";
 import { DetailStatistic } from "../models/detailStatistic";
 import { Office } from "../models/office";
 import { Statistic } from "../models/statistic";
@@ -18,12 +19,22 @@ axios.interceptors.response.use(async response => {
     console.log(response);
     return response;
 }, (error: AxiosError) => {
-    const {data, status} = error.response!
-    console.log(data)
-    console.log(status)
+    const {data, status} = error.response!;
     switch (status) {
         case 400:
-            toast.error('bad request')
+            console.log("HERE!!!!!!!!!!!!!!!!!!!!!!!!!1")
+            if(!(data as any).errors) {
+                console.log((data as any).errors)
+                const modalStateErrors = [];
+                for (const key in (data as any).errors){
+                    if((data as any).errors[key]) {
+                        modalStateErrors.push((data as any).errors[key])
+                    }
+                }
+                throw modalStateErrors.flat();
+            } else {
+                toast.error((data as any));
+            }
             break;
         case 401:
             toast.error('unauthorized')
@@ -52,6 +63,11 @@ const pageInfo = {
     countItems: 100
 }
 
+const Companies = {
+    list: () => requests.post<Company[]>('/Companies/List', pageInfo),
+    details: (id: number) => requests.get<Company>(`/Company/FindById/${id}`),
+}
+
 const Offices = {
     list: () => requests.get<Office[]>(`/Offices/List/${pageInfo.countItems}`),
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
@@ -76,10 +92,12 @@ const SubDetails = {
 }
 
 const agent = {
+    Companies,
     Offices,
     Rooms,
     Statistics,
     SubDetails
 }
+
 
 export default agent;

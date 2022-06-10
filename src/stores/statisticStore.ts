@@ -109,6 +109,10 @@ export default class StatisticStore {
     }
 
     private setDetailStatistic = (statistic: DetailStatistic) => {
+        let dates = statistic.dates
+        for(let i = 0; i < statistic.dates.length; i++){
+            dates[i] = new Date(statistic.dates[i])
+        }
         this.statisticRegistry.set(statistic.id, statistic);
     }
 

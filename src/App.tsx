@@ -6,19 +6,19 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 import HomePage from './home/HomePage';
 import OfficeForm from './forms/OfficeForm';
 import OfficeDetails from './components/OfficeDetails';
-import NotFound from './components/NotFound';
+import NotFound from './components/errors/NotFound';
 import { ToastContainer } from 'react-toastify';
-
 
 function App() {
   const loaction = useLocation();
 
   return (
     <>
-    <ToastContainer position='bottom-right' hideProgressBar/>
+      <ToastContainer position='bottom-right' hideProgressBar/>
       <Route exact path='/' component={HomePage} />
       <Route 
         path={'/(.+)'}
+
         render={() => (
           <>
             <NavBar />

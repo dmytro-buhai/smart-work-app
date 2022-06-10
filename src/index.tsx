@@ -4,20 +4,17 @@ import './index.css';
 import 'react-toastify/dist/ReactToastify.min.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { store, StoreContext } from './stores/store';
-import { createBrowserHistory } from 'history';
-
-export const history = createBrowserHistory();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <StoreContext.Provider value={store}>
-    <Router history={history}>
+    <BrowserRouter>
       <App />
-    </Router >
+    </BrowserRouter>
   </StoreContext.Provider>,
 );
 

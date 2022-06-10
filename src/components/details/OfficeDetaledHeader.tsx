@@ -46,7 +46,7 @@ export default observer(function OfficeDetaledHeader({office}: Props) {
                 </Segment>
             </Segment>
             <Segment clearing attached='bottom'>
-                <Button color='orange' floated='right'>
+                <Button as={Link} to={`/manage/${office.id}`} color='orange' floated='right'>
                     Manage Office
                 </Button>
             </Segment>
