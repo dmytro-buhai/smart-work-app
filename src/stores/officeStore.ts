@@ -13,7 +13,6 @@ export default class OfficeStore {
     loading = false;
     loadingInitial = true;
     isAddedNewOffice = false;
-    errorResult: any | undefined;
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
     predicate = new Map().set('all', true);
@@ -134,7 +133,7 @@ export default class OfficeStore {
                 this.setLoadingInitial(false);
                 return office;
             } catch (error: any) {
-                this.setError(error);
+                console.log(error);
                 this.setLoadingInitial(false);
             }
         }
@@ -179,10 +178,6 @@ export default class OfficeStore {
             console.log(error)
             this.setLoadingInitial(false);
         }  
-    }
-
-    setError = (error: any | undefined) => {
-        this.errorResult = error
     }
 
     setLoadingInitial = (state: boolean) => {

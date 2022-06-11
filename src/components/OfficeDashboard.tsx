@@ -28,7 +28,7 @@ export default observer(function OfficeDashboard(){
         }
     }, [officeRegistry.size, isAddedNewOffice, setIsAddedNewOffice, loadOffices])
 
-    if (officeStore.loadingInitial && !loadingNext) return <LoadingComponent content='Loading app' />
+    if (officeStore.loadingInitial && !loadingNext) return <LoadingComponent content='Loading offices...' />
 
     return(
         <Grid>

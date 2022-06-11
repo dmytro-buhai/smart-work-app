@@ -6,6 +6,8 @@ import { Office } from "../models/office";
 import { PaginatedResult } from "../models/pagination";
 import { Statistic } from "../models/statistic";
 import { SubscribeDetails } from "../models/subscribeDetails";
+import { User, UserFormValues } from "../models/user";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -14,6 +16,12 @@ const sleep = (delay: number) => {
 }
 
 axios.defaults.baseURL = 'https://localhost:5001/api';
+
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if(token) config.headers!.Authorization = `Bearer ${token}`
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
     await sleep(1000);
@@ -37,14 +45,15 @@ axios.interceptors.response.use(async response => {
                 }
                 throw modalStateErrors.flat();
             } else {
-                toast.error((data as any));
+                store.commonStore.navigateToNotFoundPage();
             }
             break;
         case 401:
             toast.error('unauthorized')
             break;
         case 404:
-            toast.error('not found')
+            store.commonStore.navigateToNotFoundPage();
+            toast.error('not found');
             break;
         case 500:
             toast.error('server error')
@@ -67,14 +76,21 @@ const pageInfo = {
     countItems: 100
 }
 
+const Account = {
+    current: () => requests.get<User>('/auth/account'),
+    login: (user: UserFormValues) => requests.post<User>('/auth/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/auth/register', user)
+}
+
 const Companies = {
     list: () => requests.post<Company[]>('/Companies/List', pageInfo),
     details: (id: number) => requests.get<Company>(`/Company/FindById/${id}`),
 }
 
 const Offices = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Office[]>>('Offices/List', {params})
-        .then(responseBody),
+    list: (params: URLSearchParams) => 
+    axios.get<PaginatedResult<Office[]>>
+        ('Offices/List', {params}).then(responseBody),
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
     create: (office: Office) => requests.post<string>('Office/Add', office),
     update: (office: Office) => requests.put<string>('Office/Update', office),
@@ -97,6 +113,7 @@ const SubDetails = {
 }
 
 const agent = {
+    Account,
     Companies,
     Offices,
     Rooms,

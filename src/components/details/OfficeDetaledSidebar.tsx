@@ -40,14 +40,11 @@ export default observer(function OfficeDetaledSidebar({selectedStatistic, isCanB
                 }
             </Segment>
             <Segment attached>
-                {
-                    (
-                        selectedStatistic === undefined && 
+                {selectedStatistic === undefined ? (
                         <h5>Moving to selected room...</h5>
-                    )
-                    ||
-                    <ViewStatistic selectedStatistic={currentStatistic} />
-                }
+                )   :   (
+                        <ViewStatistic selectedStatistic={currentStatistic} />
+                )}  
             </Segment>
             <Segment attached clearing>
                 <span>

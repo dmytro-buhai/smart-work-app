@@ -50,12 +50,11 @@ export default function OfficeListItem({office}: Props){
             </Segment>
             <Segment>
                 <span>
-                    {office.isFavourite && 
+                    {office.isFavourite ? (
                         <Button type="button" color='yellow' content='⭐' />
-                    }
-                    {!office.isFavourite && 
+                    )  : (
                         <Button type="button" content='⭐' />
-                    }
+                    )}
                     <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
                     <Button
                         name={office.id}

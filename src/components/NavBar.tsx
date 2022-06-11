@@ -1,8 +1,15 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Button, Container, Dropdown, Menu } from "semantic-ui-react";
+import { Link, NavLink } from "react-router-dom";
+import { Button, Container, Dropdown, Menu, Image } from "semantic-ui-react";
+import { useStore } from "../stores/store";
+import LoginForm from "./users/LoginForm";
 
-export default function NavBar(){
+export default observer(function NavBar(){
+    const{userStore: {user, isLoggedIn, logout}, modalStore} = useStore()
+
+    console.log(isLoggedIn)
+
     return(
         <Menu inverted fixed="top">
             <Container>
@@ -15,18 +22,31 @@ export default function NavBar(){
                 <Menu.Item>
                     <Button as={NavLink} to='/addOffice' positive content='Add office' />
                 </Menu.Item>
-                <Menu.Menu position='right'>
-                    <Menu.Item name="Account" />
-                    <Dropdown item text='Other'>
-                    <Dropdown.Menu>
-                        <Dropdown.Header>Text Size</Dropdown.Header>
-                        <Dropdown.Item>Bookmarks</Dropdown.Item>
-                        <Dropdown.Item>My subscriptions</Dropdown.Item>
-                        <Dropdown.Item>Share SwartWork</Dropdown.Item>
-                    </Dropdown.Menu>
-                    </Dropdown>
-                </Menu.Menu>
+
+                <Menu.Item position='right'>
+                   
+                    {isLoggedIn === false ? (
+                        <>
+                            <Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>
+                                Login
+                            </Button>
+                            <Button onClick={() => modalStore.openModal(<h1>Register</h1>)} size='huge' inverted>
+                                Register
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Image src={user?.image || 'assets/user.png'} avatar spased='right' />
+                                <Dropdown pointing='top left' text={user?.displayName}>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={Link} to={`/profile/${user?.username}`} text='My profile'/>
+                                    <Dropdown.Item onClick={logout} text='Logout' icon='power' />
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </>
+                    )}
+                </Menu.Item>
             </Container>
         </Menu>
     )
-}
+})
