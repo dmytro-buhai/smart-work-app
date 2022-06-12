@@ -1,7 +1,7 @@
 export interface InfoUserSubscribe{
     id: number;
-    subscribeDetailId: number;
+    roomId: number;
     userId: string;
-    startSubscribe: Date;
-    EndSubscribe: Date;
+    startDate: string;
+    endDate: string;
 }

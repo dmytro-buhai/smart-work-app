@@ -56,6 +56,8 @@ export default class SubscribeStore {
     }
 
     private setUserSubscribe = (userSubscribe: InfoUserSubscribe) => {
+        userSubscribe.startDate = userSubscribe.startDate.split('T')[0];
+        userSubscribe.endDate = userSubscribe.endDate.split('T')[0];
         this.subscribesRegistry.set(userSubscribe.id, userSubscribe);
     }
 

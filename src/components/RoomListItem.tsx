@@ -49,7 +49,7 @@ export default observer(function RoomListItem({room,
                             <Item>
                                 <Item.Image size='medium' bordered src={`/assets/${room.photoFileName}.jpg`}/>
                                 <Item.Content>
-                                    <Item.Header as={Link} to={`/offices/${room.id}`}>
+                                    <Item.Header as={Link} to={`/offices/${room.officeId}`}>
                                         {room.name}
                                     </Item.Header>
                                     <Item.Description>
