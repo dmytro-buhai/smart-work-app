@@ -1,6 +1,8 @@
 import { makeAutoObservable, reaction } from "mobx";
+import { ServerError } from "../models/serverError";
 
 export default class CommonStore {
+    error: ServerError | null = null;
     token: string | null = window.localStorage.getItem('jwt');
     appLoaded = false;
     baseURL: string = 'http://localhost:3000'
@@ -20,6 +22,10 @@ export default class CommonStore {
         )
     }
 
+    setServerError = (error: ServerError) => {
+        this.error = error;
+    }
+
     setToken = (token: string | null) => {
         this.token = token;
     }
@@ -30,6 +36,10 @@ export default class CommonStore {
 
     navigateToNotFoundPage = () => {
         window.location.href = `${this.baseURL}/not-found`;
+    }
+
+    navigateToServerErrorPage = () => {
+        window.location.href = `${this.baseURL}/server-error`;
     }
 
     navigateToURL = (url: string) => {

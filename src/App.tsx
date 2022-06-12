@@ -13,6 +13,7 @@ import { useStore } from './stores/store';
 import { useEffect } from 'react';
 import LoadingComponent from './components/LoadingComponent';
 import ModalContainer from './modals/ModalContainer';
+import ServerError from './components/errors/ServerError';
 
 function App() {
   const loaction = useLocation();
@@ -44,6 +45,7 @@ function App() {
                 <Route path='/offices/:id' component={OfficeDetails} />
                 <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
                 <Route path='/login' component={LoginForm} />
+                <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />
               </Switch>
             </Container> 

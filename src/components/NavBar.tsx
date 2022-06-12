@@ -4,11 +4,10 @@ import { Link, NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Menu, Image } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import LoginForm from "./users/LoginForm";
+import RegisterForm from "./users/RegisterForm";
 
 export default observer(function NavBar(){
     const{userStore: {user, isLoggedIn, logout}, modalStore} = useStore()
-
-    console.log(isLoggedIn)
 
     return(
         <Menu inverted fixed="top">
@@ -30,7 +29,7 @@ export default observer(function NavBar(){
                             <Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>
                                 Login
                             </Button>
-                            <Button onClick={() => modalStore.openModal(<h1>Register</h1>)} size='huge' inverted>
+                            <Button onClick={() => modalStore.openModal(<RegisterForm />)} size='huge' inverted>
                                 Register
                             </Button>
                         </>

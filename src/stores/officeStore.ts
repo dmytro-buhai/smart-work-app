@@ -100,7 +100,6 @@ export default class OfficeStore {
         this.loadingInitial = true;
         try{
             const result = await agent.Offices.list(this.axiosParams);
-            console.log(result);
             result.data.forEach(office => {
                 this.setOffice(office);
                 this.setCompany(office.company);
@@ -133,7 +132,7 @@ export default class OfficeStore {
                 this.setLoadingInitial(false);
                 return office;
             } catch (error: any) {
-                console.log(error);
+                console.log(error)
                 this.setLoadingInitial(false);
             }
         }

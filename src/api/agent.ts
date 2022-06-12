@@ -32,10 +32,16 @@ axios.interceptors.response.use(async response => {
     }
     return response;
 }, (error: AxiosError) => {
-    const {data, status} = error.response!;
+    const {data, status, config} = error.response!;
     switch (status) {
         case 400:
-            if(!(data as any).errors) {
+            if (typeof data === 'string'){
+                toast.error((data as string))
+            }
+            if(config.method === 'get' && (data as any).errors.hasOwnProperty('id')) {
+                store.commonStore.navigateToNotFoundPage();
+            }
+            if((data as any).errors) {
                 console.log((data as any).errors)
                 const modalStateErrors = [];
                 for (const key in (data as any).errors){
@@ -44,8 +50,6 @@ axios.interceptors.response.use(async response => {
                     }
                 }
                 throw modalStateErrors.flat();
-            } else {
-                store.commonStore.navigateToNotFoundPage();
             }
             break;
         case 401:
@@ -53,10 +57,10 @@ axios.interceptors.response.use(async response => {
             break;
         case 404:
             store.commonStore.navigateToNotFoundPage();
-            toast.error('not found');
             break;
         case 500:
-            toast.error('server error')
+            store.commonStore.setServerError((data as any));
+            store.commonStore.navigateToServerErrorPage();
             break;
     }
 
