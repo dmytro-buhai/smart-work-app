@@ -17,7 +17,7 @@ export default observer(function LoginForm() {
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h2' content='Login to SwartWork' color='teal' textAlign='center' />
                     <MyTextInput name='email' placeholder='Email' type='email' />
-                    <Label basic content='dmytro.buhai@example.com' />
+                    <Label basic content='admin@sw.com' />
                     <MyTextInput name='password' placeholder='Password' type='password' />
                     <Label basic content='_Aa123456' />
                     <ErrorMessage 
