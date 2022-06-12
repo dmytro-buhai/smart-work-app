@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import LoadingComponent from './components/LoadingComponent';
 import ModalContainer from './modals/ModalContainer';
 import ServerError from './components/errors/ServerError';
+import ProfilePage from './components/users/ProfilePage';
 
 function App() {
   const loaction = useLocation();
@@ -44,6 +45,7 @@ function App() {
                 <Route exact path='/offices' component={OfficeDashboard} />
                 <Route path='/offices/:id' component={OfficeDetails} />
                 <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
+                <Route path='/profile/:username' component={ProfilePage} />
                 <Route path='/login' component={LoginForm} />
                 <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />

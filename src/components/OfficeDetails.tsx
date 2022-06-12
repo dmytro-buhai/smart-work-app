@@ -10,9 +10,9 @@ import LoadingComponent from "./LoadingComponent";
 
 export default observer(function OfficeDetails(){
     const {officeStore} = useStore();
-    const {statisticStore} = useStore();
+    const {subscribeStore} = useStore();
     const {selectedOffice: office, loadOffice, loadingInitial} = officeStore;
-    const {loadSubscribeDetailsForRooms} = statisticStore;
+    const {loadSubscribeDetailsForRooms, subscribeDetails, loadingSubscribeDetails} = subscribeStore;
     const {id} = useParams<{id: string}>();
 
     useEffect(() => {
@@ -22,9 +22,10 @@ export default observer(function OfficeDetails(){
                 loadSubscribeDetailsForRooms(office?.rooms);
             }
         }
-    }, [id, office, loadingInitial, loadOffice, loadSubscribeDetailsForRooms]);
+    }, [id, office, subscribeDetails, loadingInitial, loadingSubscribeDetails, loadOffice, loadSubscribeDetailsForRooms]);
 
-    if(loadingInitial || !office) return <LoadingComponent/>
+    if(loadingInitial || !office) return <LoadingComponent content='Loading office rooms...'/>
+    if(loadingSubscribeDetails) return <LoadingComponent content='Loading subscribe details...'/>
 
     return(
         <Grid>

@@ -9,8 +9,8 @@ interface Props{
 }
 
 export default observer(function OfficeDetaledRooms({rooms}: Props) {
-    const {statisticStore} = useStore();
-    const {subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth} = statisticStore;
+    const {subscribeStore} = useStore();
+    const {getSubscribeDetailsForRoom} = subscribeStore;
 
     return(
         <>
@@ -20,9 +20,9 @@ export default observer(function OfficeDetaledRooms({rooms}: Props) {
                     <RoomListItem
                         key={room.id}
                         room={room}
-                        subscribeDetailsForDay={subscribeDetailsForDay.find(sd => sd.roomId === room.id)}
-                        subscribeDetailsForWeek={subscribeDetailsForWeek.find(sd => sd.roomId === room.id)}
-                        subscribeDetailsForMonth={subscribeDetailsForMonth.find(sd => sd.roomId === room.id)} 
+                        subscribeDetailsForDay={getSubscribeDetailsForRoom(room.id).find(sd => sd.type === 1)}
+                        subscribeDetailsForWeek={getSubscribeDetailsForRoom(room.id).find(sd => sd.type === 2)}
+                        subscribeDetailsForMonth={getSubscribeDetailsForRoom(room.id).find(sd => sd.type === 3)} 
                     />
                 ))}
             </List>

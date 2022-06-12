@@ -11,6 +11,10 @@ export default class UserStore {
         makeAutoObservable(this)
     }
 
+    get username() {
+        return this.user?.username 
+    }
+
     get isLoggedIn(){
         return !!this.user 
     }
@@ -21,6 +25,7 @@ export default class UserStore {
             store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
             store.modalStore.closeModal();
+            store.subscribeStore.loadUserSubscribes();
         } catch(error){
             throw(error);
         }
@@ -41,7 +46,7 @@ export default class UserStore {
         }
     }
 
-    register =async (creds: UserFormValues) => {
+    register = async (creds: UserFormValues) => {
         try{
             const user = await agent.Account.register(creds);
             store.commonStore.setToken(user.token);

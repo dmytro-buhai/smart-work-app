@@ -1,14 +1,14 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Menu, Image } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import LoginForm from "./users/LoginForm";
 import RegisterForm from "./users/RegisterForm";
 
-export default observer(function NavBar(){
-    const{userStore: {user, isLoggedIn, logout}, modalStore} = useStore()
 
+export default observer(function NavBar(){
+    const{userStore: {user, isLoggedIn, logout}, modalStore, commonStore} = useStore()
+    
     return(
         <Menu inverted fixed="top">
             <Container>
@@ -26,16 +26,16 @@ export default observer(function NavBar(){
                    
                     {isLoggedIn === false ? (
                         <>
-                            <Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>
+                            <Button onClick={() => modalStore.openModal(<LoginForm />, 'mini')} size='huge' inverted>
                                 Login
                             </Button>
-                            <Button onClick={() => modalStore.openModal(<RegisterForm />)} size='huge' inverted>
+                            <Button onClick={() => modalStore.openModal(<RegisterForm />, 'mini')} size='huge' inverted>
                                 Register
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Image src={user?.image || 'assets/user.png'} avatar spased='right' />
+                            <Image src={user?.image || commonStore.imageBasePath + '/user.png'} avatar spased='right' />
                                 <Dropdown pointing='top left' text={user?.displayName}>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={`/profile/${user?.username}`} text='My profile'/>

@@ -2,7 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Company } from "../models/company";
 import { DetailStatistic } from "../models/detailStatistic";
+import { InfoUserSubscribe } from "../models/infoUserSubscribe";
 import { Office } from "../models/office";
+import { OrderSubscribe } from "../models/orderSubscribe";
 import { PaginatedResult } from "../models/pagination";
 import { Statistic } from "../models/statistic";
 import { SubscribeDetails } from "../models/subscribeDetails";
@@ -112,6 +114,13 @@ const Statistics = {
     attendanceList: (roomId: number) => requests.get<Statistic[]>(`/AttendanceStatistic/List/${roomId}`)
 }
 
+const Subscribe = {
+    loadUserSubscribes: (username: string) => 
+        requests.get<InfoUserSubscribe[]>(`/Subscribes/GetByUser/${username}`),
+    orderUserSubscribe: (orderSubscribe: OrderSubscribe) => 
+        requests.post<InfoUserSubscribe>(`/Subscribe/OrderUserSubscribe`, orderSubscribe),
+}
+
 const SubDetails = {
     listByRooms: (roomIDs: number[]) => requests.post<SubscribeDetails[]>(`/SubscribeDetails/GetListForRooms`, roomIDs),
 }
@@ -122,7 +131,8 @@ const agent = {
     Offices,
     Rooms,
     Statistics,
-    SubDetails
+    SubDetails,
+    Subscribe
 }
 
 

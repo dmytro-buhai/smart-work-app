@@ -1,4 +1,5 @@
 import { Statistic } from "./statistic";
+import { SubscribeDetails } from "./subscribeDetails";
 
 export interface Room {
     id: number;
@@ -10,5 +11,5 @@ export interface Room {
     photoFileName: string;
     equipment?: any;
     statistics: Statistic[];
-    subscribeDetails?: any;
+    subscribeDetails: SubscribeDetails[];
 }

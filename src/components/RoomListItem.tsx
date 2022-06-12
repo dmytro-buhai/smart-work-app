@@ -1,11 +1,13 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react";
 import { Room } from "../models/room";
 import { SubscribeDetails } from "../models/subscribeDetails";
 import { useStore } from "../stores/store";
 import OfficeDetaledSidebar from "./details/OfficeDetaledSidebar";
+import SubscribeDetailsFrom from "./details/SubscribeDetailsFrom";
+import LoginForm from "./users/LoginForm";
 
 interface Props {
     room: Room
@@ -16,13 +18,21 @@ interface Props {
 
 export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
-    
+
+    const {commonStore, userStore, subscribeStore} = useStore();
+    const {userStore: {user, isLoggedIn}, modalStore} = useStore()
     const {statisticStore} = useStore();
+    
     const {loadStatisticsForRoom, currentSelectedStatistic, selectedRoomId, setSelectedRoomId} = statisticStore;
+    const {getSubscribeDetailsForRoom} = subscribeStore;
+
+    function handleSubscribe() {
+        room.subscribeDetails = getSubscribeDetailsForRoom(room.id);
+        modalStore.openModal(<SubscribeDetailsFrom room={room}/>);
+    }
 
     function handleRoomViewStatistic(event: React.MouseEvent<HTMLButtonElement>, id: number){
         const button: HTMLButtonElement = event.currentTarget;
-        console.log(button);
         loadStatisticsForRoom(id);
     }
 
@@ -63,8 +73,16 @@ export default observer(function RoomListItem({room,
                         </span>
                     </Segment>
                     <Segment clearing>
-                        <Button color='teal'>Subscribe</Button>
-                        <Button>Unsubscribe</Button>
+                        {isLoggedIn ? (
+                            <Button color='teal' onClick={() => 
+                                handleSubscribe()
+                            }>
+                                Subscribe
+                            </Button>
+                        ) : (
+                            <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
+                        )}
+                        
                         <span>
                             <Button
                                 key={room.id}

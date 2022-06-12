@@ -6,6 +6,7 @@ export default class CommonStore {
     token: string | null = window.localStorage.getItem('jwt');
     appLoaded = false;
     baseURL: string = 'http://localhost:3000'
+    imageBasePath = window.location.protocol + "//" + window.location.host + "/assets";
 
     constructor() {
         makeAutoObservable(this);
@@ -40,6 +41,10 @@ export default class CommonStore {
 
     navigateToServerErrorPage = () => {
         window.location.href = `${this.baseURL}/server-error`;
+    }
+
+    navigateToAccountPage = (username: string) => {
+        window.location.href = `${this.baseURL}/profile/${username}`;
     }
 
     navigateToURL = (url: string) => {
