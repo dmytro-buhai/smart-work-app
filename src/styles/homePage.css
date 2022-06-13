@@ -1,0 +1,15 @@
+.homePage{
+    margin: 0;
+    height: 100vh;
+    background-image: url("/public/assets/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.homeTitle{
+    width: 50%;
+    padding: 25px;
+    background-color: white;
+    backdrop-filter: blur(4px);
+}
