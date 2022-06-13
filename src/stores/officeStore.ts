@@ -155,7 +155,7 @@ export default class OfficeStore {
 
         let companyOptions = new Array<CompanyOptions>()
         try{
-            let companies = await agent.Companies.list()
+            let companies = await agent.Companies.fullList()
 
             console.log('convertOfficesToOptions')
             console.log(this.companies)

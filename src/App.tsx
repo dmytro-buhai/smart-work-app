@@ -15,6 +15,8 @@ import LoadingComponent from './components/LoadingComponent';
 import ModalContainer from './modals/ModalContainer';
 import ServerError from './components/errors/ServerError';
 import ProfilePage from './components/users/ProfilePage';
+import CompanyForm from './forms/CompanyForm';
+import CompanyList from './components/CompanyList';
 
 function App() {
   const loaction = useLocation();
@@ -43,8 +45,10 @@ function App() {
             <Container style={{paddingTop: '7em'}}>
               <Switch>
                 <Route exact path='/offices' component={OfficeDashboard} />
+                <Route exact path='/companies' component={CompanyList} />
                 <Route path='/offices/:id' component={OfficeDetails} />
                 <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
+                <Route key={loaction.key} path={['/addCompany', '/manageCompany/:id']} component={CompanyForm} />
                 <Route path='/profile/:username' component={ProfilePage} />
                 <Route path='/login' component={LoginForm} />
                 <Route path='/server-error' component={ServerError} />

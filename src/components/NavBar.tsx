@@ -17,9 +17,12 @@ export default observer(function NavBar(){
                     SmartWork
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/offices' name="Discover" />
-                <Menu.Item name="Companies" />
+                <Menu.Item as={NavLink} to='/companies' name="Companies" />
                 <Menu.Item>
                     <Button as={NavLink} to='/addOffice' positive content='Add office' />
+                </Menu.Item>
+                <Menu.Item>
+                    <Button as={NavLink} to='/addCompany' positive content='Add company' />
                 </Menu.Item>
 
                 <Menu.Item position='right'>

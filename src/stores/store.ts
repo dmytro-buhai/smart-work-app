@@ -1,5 +1,6 @@
 import { useContext, createContext } from "react";
 import CommonStore from "./commonStore";
+import CompanyStore from "./companyStore";
 import ModalStore from "./modalStore";
 import OfficeStore from "./officeStore";
 import StatisticStore from "./statisticStore";
@@ -13,6 +14,7 @@ interface Store {
     commonStore: CommonStore
     modalStore: ModalStore
     subscribeStore: SubscribeStore
+    companyStore: CompanyStore
 }
 
 export const store: Store = {
@@ -21,7 +23,8 @@ export const store: Store = {
     userStore: new UserStore(),
     commonStore: new CommonStore(),
     modalStore: new ModalStore(),
-    subscribeStore: new SubscribeStore()
+    subscribeStore: new SubscribeStore(),
+    companyStore: new CompanyStore()
 }
 
 export const StoreContext = createContext(store);

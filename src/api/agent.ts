@@ -89,8 +89,14 @@ const Account = {
 }
 
 const Companies = {
-    list: () => requests.post<Company[]>('/Companies/List', pageInfo),
+    fullList: () => requests.post<Company[]>('/Companies/FullList', pageInfo),
+    list: (params: URLSearchParams) => 
+    axios.get<PaginatedResult<Company[]>>
+        ('Companies/List', {params}).then(responseBody),
     details: (id: number) => requests.get<Company>(`/Company/FindById/${id}`),
+    create: (company: Company) => requests.post<string>('Company/Add', company),
+    update: (company: Company) => requests.put<string>('Company/Update', company),
+    delete: (id: number) => requests.del<string>(`Company/Delete/${id}`),
 }
 
 const Offices = {
