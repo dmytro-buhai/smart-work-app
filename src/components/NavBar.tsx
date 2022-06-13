@@ -18,12 +18,11 @@ export default observer(function NavBar(){
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/offices' name="Discover" />
                 <Menu.Item as={NavLink} to='/companies' name="Companies" />
-                <Menu.Item>
-                    <Button as={NavLink} to='/addOffice' positive content='Add office' />
-                </Menu.Item>
-                <Menu.Item>
-                    <Button as={NavLink} to='/addCompany' positive content='Add company' />
-                </Menu.Item>
+                {isLoggedIn && 
+                    <Menu.Item>
+                        <Button as={NavLink} to='/addCompany' positive content='Add company' />
+                    </Menu.Item>
+                }
 
                 <Menu.Item position='right'>
                    
@@ -42,6 +41,7 @@ export default observer(function NavBar(){
                                 <Dropdown pointing='top left' text={user?.displayName}>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={`/profile/${user?.username}`} text='My profile'/>
+                                    <Dropdown.Item text='UA | US'/>
                                     <Dropdown.Item onClick={logout} text='Logout' icon='power' />
                                 </Dropdown.Menu>
                             </Dropdown>

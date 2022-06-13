@@ -1,7 +1,8 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react";
+import RoomForm from "../forms/RoomForm";
 import { Room } from "../models/room";
 import { SubscribeDetails } from "../models/subscribeDetails";
 import { useStore } from "../stores/store";
@@ -19,8 +20,8 @@ interface Props {
 export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
 
-    const {commonStore, userStore, subscribeStore} = useStore();
-    const {userStore: {user, isLoggedIn}, modalStore} = useStore()
+    const {subscribeStore} = useStore();
+    const {userStore: {isLoggedIn}, modalStore} = useStore()
     const {statisticStore} = useStore();
     
     const {loadStatisticsForRoom, currentSelectedStatistic, selectedRoomId, setSelectedRoomId} = statisticStore;
@@ -33,6 +34,7 @@ export default observer(function RoomListItem({room,
 
     function handleRoomViewStatistic(event: React.MouseEvent<HTMLButtonElement>, id: number){
         const button: HTMLButtonElement = event.currentTarget;
+        console.log(button);
         loadStatisticsForRoom(id);
     }
 
@@ -82,7 +84,11 @@ export default observer(function RoomListItem({room,
                         ) : (
                             <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
                         )}
-                        
+                        <Button 
+                            color='orange' 
+                            onClick={() => modalStore.openModal(<RoomForm roomId={room.id} officeId={room.officeId} />)}
+                            content='Edit'
+                        />
                         <span>
                             <Button
                                 key={room.id}

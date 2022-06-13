@@ -1,7 +1,9 @@
 import { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
+import { Button, Icon, Item, Segment } from "semantic-ui-react";
+import OfficeForm from "../forms/OfficeForm";
 import { Company } from "../models/company";
+
 import { useStore } from "../stores/store";
 
 interface Props {
@@ -9,7 +11,7 @@ interface Props {
 }
 
 export default function CompanyListItem({company}: Props){
-    const {companyStore} = useStore();
+    const {companyStore, modalStore} = useStore();
     const {deleteCompany, loading} = companyStore;
 
     const[target, setTarget] = useState(0);
@@ -44,6 +46,11 @@ export default function CompanyListItem({company}: Props){
                 </span>
             </Segment>
             <Segment clearing>
+                <Button 
+                    onClick={() => modalStore.openModal(<OfficeForm companyId={company.id}/>)}
+                    positive
+                    content='Add office'
+                />
                 <span>
                     <Button as={Link} to={`/companies/${company.id}`}  floated='right' content='View' color='blue' />
                     <Button

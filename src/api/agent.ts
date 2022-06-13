@@ -6,6 +6,7 @@ import { InfoUserSubscribe } from "../models/infoUserSubscribe";
 import { Office } from "../models/office";
 import { OrderSubscribe } from "../models/orderSubscribe";
 import { PaginatedResult } from "../models/pagination";
+import { Room } from "../models/room";
 import { Statistic } from "../models/statistic";
 import { SubscribeDetails } from "../models/subscribeDetails";
 import { User, UserFormValues } from "../models/user";
@@ -24,13 +25,14 @@ axios.interceptors.request.use(config => {
     if(token) config.headers!.Authorization = `Bearer ${token}`
     return config;
 })
-
 axios.interceptors.response.use(async response => {
     await sleep(1000);
     const pagination = response.headers['pagination'];
     if(pagination){
-        response.data = new PaginatedResult(response.data, JSON.parse(pagination));
-        return response as AxiosResponse<PaginatedResult<any>>
+        response.data = new PaginatedResult(response.data, 
+            JSON.parse(pagination));
+        return response as 
+            AxiosResponse<PaginatedResult<any>>
     }
     return response;
 }, (error: AxiosError) => {
@@ -40,7 +42,8 @@ axios.interceptors.response.use(async response => {
             if (typeof data === 'string'){
                 toast.error((data as string))
             }
-            if(config.method === 'get' && (data as any).errors.hasOwnProperty('id')) {
+            if(config.method === 'get' && (data as any)
+                .errors.hasOwnProperty('id')) {
                 store.commonStore.navigateToNotFoundPage();
             }
             if((data as any).errors) {
@@ -48,7 +51,8 @@ axios.interceptors.response.use(async response => {
                 const modalStateErrors = [];
                 for (const key in (data as any).errors){
                     if((data as any).errors[key]) {
-                        modalStateErrors.push((data as any).errors[key])
+                        modalStateErrors.push((data as any)
+                            .errors[key])
                     }
                 }
                 throw modalStateErrors.flat();
@@ -65,17 +69,20 @@ axios.interceptors.response.use(async response => {
             store.commonStore.navigateToServerErrorPage();
             break;
     }
-
     return Promise.reject(error);
 })
 
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;
 
 const requests ={
-    get: <T> (url: string) => axios.get<T>(url).then(responseBody),
-    post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    get: <T> (url: string) => axios
+        .get<T>(url).then(responseBody),
+    post: <T> (url: string, body: {}) => axios
+        .post<T>(url, body).then(responseBody),
+    put: <T> (url: string, body: {}) => axios
+        .put<T>(url, body).then(responseBody),
+    del: <T> (url: string) => axios
+        .delete<T>(url).then(responseBody),
 }
 
 const pageInfo = {
@@ -103,6 +110,7 @@ const Offices = {
     list: (params: URLSearchParams) => 
     axios.get<PaginatedResult<Office[]>>
         ('Offices/List', {params}).then(responseBody),
+    fullList: () => requests.post<Office[]>('/Office/FullList', pageInfo),
     details: (id: number) => requests.get<Office>(`/Office/FindById/${id}`),
     create: (office: Office) => requests.post<string>('Office/Add', office),
     update: (office: Office) => requests.put<string>('Office/Update', office),
@@ -111,6 +119,9 @@ const Offices = {
 
 const Rooms = {
     getRoomInfoById: (id: number) => requests.get<any>(`/Room/GetRoomInfoById/${id}`),
+    create: (room: Room) => requests.post<string>('Room/Add', room),
+    update: (room: Room) => requests.put<string>('Room/Update', room),
+    delete: (id: number) => requests.del<string>(`Room/Delete/${id}`),
 }
 
 const Statistics = {

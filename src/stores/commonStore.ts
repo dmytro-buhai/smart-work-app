@@ -35,6 +35,10 @@ export default class CommonStore {
         this.appLoaded = true;
     }
 
+    reloadPage = () => {
+        window.location.reload();
+    }
+
     navigateToNotFoundPage = () => {
         window.location.href = `${this.baseURL}/not-found`;
     }

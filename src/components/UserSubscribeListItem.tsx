@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
-import { Button, Divider, Grid, Header, Icon, Image, Item, Segment } from "semantic-ui-react";
+import { Grid, Header, Icon, Image, Item, Segment } from "semantic-ui-react";
 import { InfoUserSubscribe } from "../models/infoUserSubscribe";
-import { Room } from "../models/room";
 import { useStore } from "../stores/store";
 
 interface Props {
@@ -10,8 +9,8 @@ interface Props {
 }
 
 export default observer(function UserSubscribeListItem({userSubscribe}: Props){
-    const {commonStore, userStore, subscribeStore} = useStore();
-    const {getSubscribeDetailsForRoom} = subscribeStore;
+    const {commonStore} = useStore();
+    //const {getSubscribeDetailsForRoom} = subscribeStore;
     
     return (  
         <Grid>

@@ -1,7 +1,10 @@
 import { observer } from "mobx-react-lite"
 import { Link } from "react-router-dom"
 import { Segment, Image, Item, Header, Label, Button } from "semantic-ui-react"
+import OfficeForm from "../../forms/OfficeForm"
+import RoomForm from "../../forms/RoomForm"
 import { Office } from "../../models/office"
+import { useStore } from "../../stores/store"
 
 const officeImageStyle = {
     filter: 'brightness(30%)'
@@ -21,6 +24,8 @@ interface Props{
 }
 
 export default observer(function OfficeDetaledHeader({office}: Props) {
+    const{userStore: {isLoggedIn}, modalStore} = useStore();
+
     return(
         <Segment.Group>
             <Segment basic attached='top' style={{padding: 0}}>
@@ -46,9 +51,17 @@ export default observer(function OfficeDetaledHeader({office}: Props) {
                 </Segment>
             </Segment>
             <Segment clearing attached='bottom'>
-                <Button as={Link} to={`/manage/${office.id}`} color='orange' floated='right'>
-                    Manage Office
-                </Button>
+                {isLoggedIn &&
+                    <Button onClick={() => modalStore.openModal(<OfficeForm officeId={office.id} companyId={office.companyId}/>)} color='orange' floated='right'>
+                        Manage Office
+                    </Button>
+                    
+                }
+                <Button 
+                    onClick={() => modalStore.openModal(<RoomForm officeId={office.id}/>)}
+                    positive
+                    content='Add room'
+                />
             </Segment>
         </Segment.Group>
     )

@@ -47,7 +47,6 @@ function App() {
                 <Route exact path='/offices' component={OfficeDashboard} />
                 <Route exact path='/companies' component={CompanyList} />
                 <Route path='/offices/:id' component={OfficeDetails} />
-                <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
                 <Route key={loaction.key} path={['/addCompany', '/manageCompany/:id']} component={CompanyForm} />
                 <Route path='/profile/:username' component={ProfilePage} />
                 <Route path='/login' component={LoginForm} />

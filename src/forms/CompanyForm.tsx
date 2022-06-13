@@ -46,7 +46,7 @@ export default observer(function CompanyForm(){
 
     function handleFormSubmit(company: Company) {
         if(company.id === 0){
-            createCompany(company).then((companyId) => {setIsAddedNewCompany(true); history.push(`/companies/${companyId}`)});
+            createCompany(company).then(() => {setIsAddedNewCompany(true); history.push('/companies')});
         } else {
             updateCompany(company).then(() => { history.push(`/companies/${company.id}`) });
         }      

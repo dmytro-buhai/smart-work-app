@@ -10,6 +10,6 @@ export interface Room {
     amountOfWorkplaces: number;
     photoFileName: string;
     equipment?: any;
-    statistics: Statistic[];
-    subscribeDetails: SubscribeDetails[];
+    statistics?: Statistic[];
+    subscribeDetails?: SubscribeDetails[];
 }

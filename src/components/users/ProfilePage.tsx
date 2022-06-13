@@ -1,24 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Segment, Image, Item, Header, Grid, GridColumn, Icon, Button, List, Divider } from "semantic-ui-react";
+import { Segment, Item, Header, List } from "semantic-ui-react";
 import '../../index.css'
 import { useStore } from "../../stores/store";
 import LoadingComponent from "../LoadingComponent";
 import UserSubscribeListItem from "../UserSubscribeListItem";
-
-const officeImageStyle = {
-    filter: 'brightness(30%)'
-}
-
-const officeImageTextStyle = {
-    position: 'absolute',
-    bottom: '5%',
-    left: '5%',
-    wifth: '100%',
-    heigth: 'auto',
-    color: 'white'
-}
 
 export default observer(function ProfilePage() {
     const {commonStore, userStore, subscribeStore} = useStore();
@@ -44,8 +30,13 @@ export default observer(function ProfilePage() {
                         <Item.Image avatar src={`${commonStore.imageBasePath}/user.png`} />
                         
                         <Item.Content verticalAlign="middle">
-                            <Header as='h1' content="Bob"/>
+                            <Header as='h1' content={userStore.user?.username}/>
+                            <Item.Description >
+                                <h3>bob@example.com</h3>
+                            </Item.Description>
+
                         </Item.Content>
+                        
                     </Item>
                 </Item.Group>
             </Segment>

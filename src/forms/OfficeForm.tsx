@@ -11,17 +11,21 @@ import MySelectInput from './MySelectInput';
 import { CompanyOptions } from '../models/companyOptions';
 import { Office } from '../models/office';
 
-export default observer(function OfficeForm(){
+interface Props{
+    officeId?: number;
+    companyId: number;
+}
+
+export default observer(function OfficeForm({officeId, companyId}: Props){
     const history = useHistory();
-    const {officeStore} = useStore();
+    const {officeStore, modalStore, commonStore} = useStore();
     const {createOffice, updateOffice, 
         loading, getCompaniesOptions, loadOffice, loadingInitial, setIsAddedNewOffice} = officeStore;
-    const {id} = useParams<{id: string}>();
     const [compOptions, setCompOptions] = useState<Array<CompanyOptions>>()
 
     const[office, setOffice] = useState({
         id: 0,
-        companyId: 0,
+        companyId: companyId,
         name: '',
         address: '',
         phoneNumber: '',
@@ -44,7 +48,6 @@ export default observer(function OfficeForm(){
         address: Yup.string().required('The office address is required')
                 .matches(/^[A-Za-z0-9]+(?:\s[A-Za-z0-9',/_-]+)+$/g,
                 "Please, specify a valid address, for example, Correct address, 54 or Correct address, 54/2"),
-        companyId: Yup.string().required('The office company is required'),
         phoneNumber: Yup.string()
                 .required('The office phone number is required')
                 .matches(/^0\d{9}$/g, 
@@ -52,22 +55,19 @@ export default observer(function OfficeForm(){
     })
 
     useEffect(() => {
-        if (id) {
-            loadOffice(+id).then(office => setOffice(office!));
+        if (officeId) {
+            loadOffice(officeId).then(office => setOffice(office!));
         }
-        getCompaniesOptions().then(opts => setCompOptions(opts));
-    }, [id, loadOffice, getCompaniesOptions, setCompOptions]);
+    }, [officeId, loadOffice, setOffice]);
 
     function handleFormSubmit(office: Office) {
         console.log(office)
         if(office.id === 0){
             createOffice(office).then((officeId) => {setIsAddedNewOffice(true); history.push(`/offices/${officeId}`)});
         } else {
-            updateOffice(office).then(() => { history.push(`/offices/${office.id}`) });
+            updateOffice(office);
         }      
     }
-
-    if(loadingInitial) return <LoadingComponent content='Loading office...' />
 
     return(
         <Segment clearing>
@@ -81,7 +81,6 @@ export default observer(function OfficeForm(){
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
                         <MyTextInput name='name' placeholder='Name'/>
-                        <MySelectInput name='companyId' options={compOptions!} placeholder='Company' />
                         <MyTextInput name='address' placeholder='Address' />
                         <MyTextInput name='phoneNumber' type="tel" placeholder='PhoneNumber' />
                        
@@ -89,7 +88,7 @@ export default observer(function OfficeForm(){
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={loading} floated="right" 
                             positive type="submit" content='Submit' />
-                        <Button as={Link} to='/offices' floated="right" type="button" content='Cancel' />
+                        <Button onClick={() => modalStore.closeModal()} floated="right" type="button" content='Cancel' />
                     </Form>
                 )}
             </Formik>

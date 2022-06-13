@@ -4,6 +4,8 @@ import { Company } from "../models/company";
 import { CompanyOptions } from "../models/companyOptions";
 import { Office } from "../models/office";
 import { Pagination, PagingParams } from "../models/pagination";
+import { Room } from "../models/room";
+import { store } from "./store";
 
 export default class OfficeStore {
     companyRegistry = new Map<number, Company>();
@@ -195,6 +197,7 @@ export default class OfficeStore {
                 this.editMode = false;
                 this.loading = false;
             })
+            store.modalStore.closeModal();
             return +id;
         }catch (error) {
             console.log(error);
@@ -207,7 +210,6 @@ export default class OfficeStore {
     updateOffice = async (office: Office) => {
         this.loading = true;
         try{
-            office.company = await agent.Companies.details(office.companyId);
             await agent.Offices.update(office);
             runInAction(() => {
                 this.officeRegistry.set(office.id, office);
@@ -215,11 +217,44 @@ export default class OfficeStore {
                 this.editMode = false;
                 this.loading = false;
             })
+            store.modalStore.closeModal();
         }catch (error) {
             console.log(error);
             runInAction(() => {
                 this.loading = false;
             })
+        }
+    }
+
+    addRoom = async (room: Room) => {
+        try{
+            console.log(room.id);
+            let office = this.selectedOffice;
+            (office!.rooms as Room[]).push(room);
+            runInAction(() => {
+                this.officeRegistry.set(office!.id, office!);
+                this.selectedOffice = office;
+            })
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+
+    updateRoom = async (room: Room) => {
+        try{
+            let office = this.selectedOffice!;
+            let currentRoom = (office.rooms as Room[]).find(r => r.id === room.id);
+
+            if (currentRoom) {
+                let currentRoomIndex = (office!.rooms as Room[]).indexOf(currentRoom);
+                (office!.rooms as Room[])[currentRoomIndex] = room;
+            }
+            runInAction(() => {
+                this.officeRegistry.set(office!.id, office!);
+                this.selectedOffice = office;
+            })
+        } catch (error: any) {
+            console.log(error)
         }
     }
 

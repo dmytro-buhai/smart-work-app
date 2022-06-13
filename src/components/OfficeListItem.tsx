@@ -10,6 +10,7 @@ interface Props {
 
 export default function OfficeListItem({office}: Props){
     const {officeStore} = useStore();
+    const{userStore: {isLoggedIn}} = useStore()
     const {deleteOffice, loading} = officeStore;
 
     const[target, setTarget] = useState(0);
@@ -56,14 +57,16 @@ export default function OfficeListItem({office}: Props){
                         <Button type="button" content='⭐' />
                     )}
                     <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
-                    <Button
-                        name={office.id}
-                        loading={loading && target === office.id}
-                        onClick={(e) => handleOfficeDelete(e, office.id)} 
-                        floated='right' 
-                        content='Delete' 
-                        color='red' 
-                    />
+                    {isLoggedIn && 
+                        <Button
+                            name={office.id}
+                            loading={loading && target === office.id}
+                            onClick={(e) => handleOfficeDelete(e, office.id)} 
+                            floated='right' 
+                            content='Delete' 
+                            color='red' 
+                        />
+                    }
                 </span>
             </Segment>
         </Segment.Group> 
