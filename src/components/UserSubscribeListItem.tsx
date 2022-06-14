@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button, Grid, Header, Icon, Item, Segment } from "semantic-ui-react";
 import { InfoUserSubscribe } from "../models/infoUserSubscribe";
 import QRCode from "qrcode.react";
-import { useState } from "react";
 
 interface Props {
     userSubscribe: InfoUserSubscribe

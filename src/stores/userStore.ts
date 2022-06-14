@@ -6,6 +6,7 @@ import { store } from "./store";
 
 export default class UserStore {
     user: User | null = null;
+    loading: boolean = false;
     adminHostName: string = 'admin'
 
     constructor() {
@@ -68,5 +69,23 @@ export default class UserStore {
         } catch(error){
             throw(error);
         }
+    }
+
+    update = async (user: User) => {
+        this.setLoading(true);
+        try{
+            await agent.Account.update(user);
+            this.user = await agent.Account.current()
+            this.setLoading(false);
+            store.modalStore.closeModal();
+        } catch(error){
+            this.setLoading(false);
+            store.modalStore.closeModal();
+            throw(error);
+        }
+    }
+
+    private setLoading = (state: boolean) => {
+        this.loading = state;
     }
 }

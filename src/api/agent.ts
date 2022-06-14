@@ -6,6 +6,7 @@ import { InfoUserSubscribe } from "../models/infoUserSubscribe";
 import { Office } from "../models/office";
 import { OrderSubscribe } from "../models/orderSubscribe";
 import { PaginatedResult } from "../models/pagination";
+import { Profile } from "../models/profile";
 import { Room } from "../models/room";
 import { Statistic } from "../models/statistic";
 import { SubscribeDetails } from "../models/subscribeDetails";
@@ -92,7 +93,8 @@ const pageInfo = {
 const Account = {
     current: () => requests.get<User>('/auth/account'),
     login: (user: UserFormValues) => requests.post<User>('/auth/login', user),
-    register: (user: UserFormValues) => requests.post<User>('/auth/register', user)
+    register: (user: UserFormValues) => requests.post<User>('/auth/register', user),
+    update: (user: User) => requests.put<string>('user/update', user)
 }
 
 const Companies = {
