@@ -51,13 +51,13 @@ export default class UserStore {
     }
 
     checkHostName = (host: string | null) => {
-        console.log(host);
-        console.log(this.user?.username === this.adminHostName);
-        
-        if (host === null) return this.user !== null;
         return this.user?.username === this.adminHostName ?
                                        true :
                                        this.user?.username === host;
+    }
+
+    checkAdminName = () => {
+        return this.user?.username === this.adminHostName;                          
     }
 
     register = async (creds: UserFormValues) => {

@@ -231,6 +231,22 @@ export default class OfficeStore {
         }
     }
 
+    updateOfficeIsFavoriteProp = async (officeId: number, state: boolean) => {
+        this.loading = true;
+        try{
+            let office = this.getOffice(officeId);
+            office!.isFavourite = state;
+            await agent.Offices.update(office!);
+            runInAction(() => {
+                this.officeRegistry.set(office!.id, office!);
+            })
+            this.loading = false;
+        }catch (error) {
+            console.log(error);
+            this.loading = false;
+        }
+    }
+
     addRoom = async (room: Room) => {
         try{
             console.log(room.id);
