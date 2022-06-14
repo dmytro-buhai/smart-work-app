@@ -21,7 +21,7 @@ export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
 
     const {subscribeStore} = useStore();
-    const {userStore: {isLoggedIn}, modalStore} = useStore()
+    const {userStore: {checkHostName, isLoggedIn}, modalStore} = useStore()
     const {statisticStore} = useStore();
     
     const {loadStatisticsForRoom, currentSelectedStatistic, selectedRoomId, setSelectedRoomId} = statisticStore;
@@ -74,32 +74,49 @@ export default observer(function RoomListItem({room,
                             Room number: {room.number}
                         </span>
                     </Segment>
-                    <Segment clearing>
-                        {isLoggedIn ? (
-                            <Button color='teal' onClick={() => 
-                                handleSubscribe()
-                            }>
-                                Subscribe
-                            </Button>
+                    {!checkHostName(room.host) ?
+                        (
+                            <Segment clearing>
+                                {isLoggedIn ? (
+                                    <Button 
+                                        color='teal' 
+                                        onClick={() =>  handleSubscribe()}
+                                        content='Subscribe'
+                                    />
+                                ) : (
+                                    <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
+                                )}
+                                <span>
+                                    <Button
+                                        key={room.id}
+                                        name={room.id}
+                                        onClick={(event) => handleRoomViewStatistic(event, room.id)} 
+                                        floated='right' 
+                                        content='View statistics' 
+                                        color='blue' 
+                                    />
+                                </span>
+                            </Segment>
                         ) : (
-                            <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
-                        )}
-                        <Button 
-                            color='orange' 
-                            onClick={() => modalStore.openModal(<RoomForm roomId={room.id} officeId={room.officeId} />)}
-                            content='Edit'
-                        />
-                        <span>
-                            <Button
-                                key={room.id}
-                                name={room.id}
-                                onClick={(event) => handleRoomViewStatistic(event, room.id)} 
-                                floated='right' 
-                                content='View statistics' 
-                                color='blue' 
-                            />
-                        </span>
-                    </Segment>
+                            <Segment clearing>
+                                <Button 
+                                    color='orange' 
+                                    onClick={() => modalStore.openModal(<RoomForm roomId={room.id} officeId={room.officeId} />)}
+                                    content='Edit'
+                                />
+                                <span>
+                                    <Button
+                                        key={room.id}
+                                        name={room.id}
+                                        onClick={(event) => handleRoomViewStatistic(event, room.id)} 
+                                        floated='right' 
+                                        content='View statistics' 
+                                        color='blue' 
+                                    />
+                                </span>
+                            </Segment>
+                        )
+                    }
                 </Segment.Group> 
             </Grid.Column>
                 <Grid.Column width={6}>

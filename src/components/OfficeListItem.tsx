@@ -10,7 +10,7 @@ interface Props {
 
 export default function OfficeListItem({office}: Props){
     const {officeStore} = useStore();
-    const{userStore: {isLoggedIn}} = useStore()
+    const{userStore: {checkHostName}} = useStore()
     const {deleteOffice, loading} = officeStore;
 
     const[target, setTarget] = useState(0);
@@ -57,7 +57,7 @@ export default function OfficeListItem({office}: Props){
                         <Button type="button" content='⭐' />
                     )}
                     <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
-                    {isLoggedIn && 
+                    {checkHostName(office.host) && 
                         <Button
                             name={office.id}
                             loading={loading && target === office.id}

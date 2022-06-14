@@ -12,4 +12,5 @@ export interface Room {
     equipment?: any;
     statistics?: Statistic[];
     subscribeDetails?: SubscribeDetails[];
+    host: string;
 }

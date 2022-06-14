@@ -55,6 +55,10 @@ export default class OfficeStore {
                 resetPredicate();
                 this.predicate.set('isFavourite', true);
                 break;
+            case 'host':
+                resetPredicate();
+                this.predicate.set('host', store.userStore.user?.username);
+                break;
         }
     }
 
@@ -127,6 +131,7 @@ export default class OfficeStore {
             this.loadingInitial = true;
             try{
                 office = await agent.Offices.details(id);
+                console.log(office);
                 this.setOffice(office);
                 runInAction(() =>{
                     this.selectedOffice = office;

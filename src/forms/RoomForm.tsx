@@ -13,7 +13,7 @@ interface Props{
 }
 
 export default observer(function RoomForm({roomId, officeId}: Props){
-    const {roomStore, modalStore } = useStore();
+    const {roomStore, modalStore, userStore: {user} } = useStore();
     const {loadRoom, createRoom, updateRoom, 
         loading } = roomStore;
 
@@ -25,6 +25,7 @@ export default observer(function RoomForm({roomId, officeId}: Props){
         square: 0,
         amountOfWorkplaces: 0,
         photoFileName: 'default_room_photo_file_name',
+        host: ''
     });
 
     const validationSchema = Yup.object({
@@ -49,6 +50,7 @@ export default observer(function RoomForm({roomId, officeId}: Props){
 
     function handleFormSubmit(room: Room) {
         if(room.id === 0){
+            room.host = user!.username;
             createRoom(room);
         } else {
             updateRoom(room);

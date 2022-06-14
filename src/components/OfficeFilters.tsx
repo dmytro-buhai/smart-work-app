@@ -3,7 +3,7 @@ import { Header, Menu } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 
 export default observer(function OfficeFilters() {
-    const {officeStore: {predicate, setPredicate}} = useStore();
+    const {officeStore: {predicate, setPredicate}, userStore: {user}} = useStore();
 
     return (
         <Menu vertical size='large' style={{width: '100%', marginTop: 55}}>
@@ -17,6 +17,11 @@ export default observer(function OfficeFilters() {
                 content='Favorites' 
                 active={predicate.has('isFavourite')}
                 onClick={() => setPredicate('isFavourite', 'true')}
+            />
+            <Menu.Item 
+                content='My' 
+                active={predicate.has('host')}
+                onClick={() => setPredicate('host', user!.username)}
             />
         </Menu>
     )

@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function CompanyListItem({company}: Props){
-    const {companyStore, modalStore} = useStore();
+    const {companyStore, modalStore, userStore: {checkHostName}} = useStore();
     const {deleteCompany, loading} = companyStore;
 
     const[target, setTarget] = useState(0);
@@ -45,24 +45,26 @@ export default function CompanyListItem({company}: Props){
                     {company.description} 
                 </span>
             </Segment>
-            <Segment clearing>
-                <Button 
-                    onClick={() => modalStore.openModal(<OfficeForm companyId={company.id}/>)}
-                    positive
-                    content='Add office'
-                />
-                <span>
-                    <Button as={Link} to={`/companies/${company.id}`}  floated='right' content='View' color='blue' />
-                    <Button
-                        name={company.id}
-                        loading={loading && target === company.id}
-                        onClick={(e) => handleCompanyDelete(e, company.id)} 
-                        floated='right' 
-                        content='Delete' 
-                        color='red' 
+            {checkHostName(company.host) &&  
+                <Segment clearing>
+                    <Button 
+                        onClick={() => modalStore.openModal(<OfficeForm companyId={company.id}/>)}
+                        positive
+                        content='Add office'
                     />
-                </span>
-            </Segment>
+                    <span>
+                        <Button as={Link} to={`/companies/${company.id}`}  floated='right' content='View' color='blue' />
+                        <Button
+                            name={company.id}
+                            loading={loading && target === company.id}
+                            onClick={(e) => handleCompanyDelete(e, company.id)} 
+                            floated='right' 
+                            content='Delete' 
+                            color='red' 
+                        />
+                    </span>
+                </Segment>
+            }
         </Segment.Group> 
     )
 }

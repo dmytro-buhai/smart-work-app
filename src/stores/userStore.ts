@@ -6,6 +6,7 @@ import { store } from "./store";
 
 export default class UserStore {
     user: User | null = null;
+    adminHostName: string = 'admin'
 
     constructor() {
         makeAutoObservable(this)
@@ -26,6 +27,7 @@ export default class UserStore {
             runInAction(() => this.user = user);
             store.modalStore.closeModal();
             store.subscribeStore.loadUserSubscribes();
+            store.commonStore.reloadPage();
         } catch(error){
             throw(error);
         }
@@ -35,6 +37,7 @@ export default class UserStore {
         store.commonStore.setToken(null);
         window.localStorage.removeItem('jwt');
         this.user = null;
+        store.commonStore.reloadPage();
     }
 
     getUser = async () => {
@@ -44,6 +47,16 @@ export default class UserStore {
         } catch (error){
             console.log(error);            
         }
+    }
+
+    checkHostName = (host: string | null) => {
+        console.log(host);
+        console.log(this.user?.username === this.adminHostName);
+        
+        if (host === null) return this.user !== null;
+        return this.user?.username === this.adminHostName ?
+                                       true :
+                                       this.user?.username === host;
     }
 
     register = async (creds: UserFormValues) => {

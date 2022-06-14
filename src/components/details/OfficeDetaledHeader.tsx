@@ -24,7 +24,7 @@ interface Props{
 }
 
 export default observer(function OfficeDetaledHeader({office}: Props) {
-    const{userStore: {isLoggedIn}, modalStore} = useStore();
+    const{userStore: {checkHostName}, modalStore} = useStore();
 
     return(
         <Segment.Group>
@@ -51,17 +51,24 @@ export default observer(function OfficeDetaledHeader({office}: Props) {
                 </Segment>
             </Segment>
             <Segment clearing attached='bottom'>
-                {isLoggedIn &&
-                    <Button onClick={() => modalStore.openModal(<OfficeForm officeId={office.id} companyId={office.companyId}/>)} color='orange' floated='right'>
-                        Manage Office
-                    </Button>
-                    
+                {checkHostName(office.host) &&
+                    <>
+                        <Button 
+                            onClick={() => modalStore
+                                .openModal(<OfficeForm officeId={office.id} companyId={office.companyId}/>)} 
+                            color='orange' 
+                            floated='right'
+                            content='Manage Office'
+                        />
+                        <Button 
+                            onClick={() => modalStore.openModal(<RoomForm officeId={office.id}/>)}
+                            positive
+                            content='Add room'
+                        />
+    
+                    </> 
                 }
-                <Button 
-                    onClick={() => modalStore.openModal(<RoomForm officeId={office.id}/>)}
-                    positive
-                    content='Add room'
-                />
+                
             </Segment>
         </Segment.Group>
     )

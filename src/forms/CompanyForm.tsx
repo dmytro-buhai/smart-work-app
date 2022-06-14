@@ -11,7 +11,7 @@ import { Company } from '../models/company';
 
 export default observer(function CompanyForm(){
     const history = useHistory();
-    const {companyStore} = useStore();
+    const {companyStore, userStore: {user}} = useStore();
     const {createCompany, updateCompany, 
         loading, loadCompany, loadingInitial, setIsAddedNewCompany} = companyStore;
     const {id} = useParams<{id: string}>();
@@ -23,6 +23,7 @@ export default observer(function CompanyForm(){
         phoneNumber: '',
         description: '',
         photoFileName: 'default_company_photo_file_name',
+        host: ''
     });
 
     const validationSchema = Yup.object({
@@ -46,6 +47,7 @@ export default observer(function CompanyForm(){
 
     function handleFormSubmit(company: Company) {
         if(company.id === 0){
+            company.host = user!.username;
             createCompany(company).then(() => {setIsAddedNewCompany(true); history.push('/companies')});
         } else {
             updateCompany(company).then(() => { history.push(`/companies/${company.id}`) });

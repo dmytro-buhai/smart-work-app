@@ -1,14 +1,11 @@
 import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Button, Form, Header, Segment } from "semantic-ui-react";
-import LoadingComponent from '../components/LoadingComponent';
 import { useStore } from "../stores/store";
 import * as Yup from 'yup';
 import MyTextInput from './MyTextInput';
-import MySelectInput from './MySelectInput';
-import { CompanyOptions } from '../models/companyOptions';
 import { Office } from '../models/office';
 
 interface Props{
@@ -18,10 +15,9 @@ interface Props{
 
 export default observer(function OfficeForm({officeId, companyId}: Props){
     const history = useHistory();
-    const {officeStore, modalStore, commonStore} = useStore();
+    const {officeStore, modalStore, userStore: {user}} = useStore();
     const {createOffice, updateOffice, 
-        loading, getCompaniesOptions, loadOffice, loadingInitial, setIsAddedNewOffice} = officeStore;
-    const [compOptions, setCompOptions] = useState<Array<CompanyOptions>>()
+        loading, loadOffice,  setIsAddedNewOffice} = officeStore;
 
     const[office, setOffice] = useState({
         id: 0,
@@ -39,7 +35,9 @@ export default observer(function OfficeForm({officeId, companyId}: Props){
             phoneNumber: '',
             description: '',
             photoFileName: 'default_company_photo_file_name',
-        }
+            host: ''
+        },
+        host: ''
     });
 
     const validationSchema = Yup.object({
@@ -61,8 +59,8 @@ export default observer(function OfficeForm({officeId, companyId}: Props){
     }, [officeId, loadOffice, setOffice]);
 
     function handleFormSubmit(office: Office) {
-        console.log(office)
         if(office.id === 0){
+            office.host = user!.username;
             createOffice(office).then((officeId) => {setIsAddedNewOffice(true); history.push(`/offices/${officeId}`)});
         } else {
             updateOffice(office);
