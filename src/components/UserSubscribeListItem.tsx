@@ -1,17 +1,33 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
-import { Grid, Header, Icon, Image, Item, Segment } from "semantic-ui-react";
+import { Button, Grid, Header, Icon, Item, Segment } from "semantic-ui-react";
 import { InfoUserSubscribe } from "../models/infoUserSubscribe";
-import { useStore } from "../stores/store";
+import QRCode from "qrcode.react";
+import { useState } from "react";
 
 interface Props {
     userSubscribe: InfoUserSubscribe
 }
 
 export default observer(function UserSubscribeListItem({userSubscribe}: Props){
-    const {commonStore} = useStore();
-    //const {getSubscribeDetailsForRoom} = subscribeStore;
-    
+    const qrValue = `${userSubscribe.id}_${userSubscribe.userId}_` + 
+                    `${userSubscribe.roomId}_${userSubscribe.startDate}_` +
+                    `${userSubscribe.endDate}`;
+
+    const downloadQRCode = () => {
+        // Generate download with use canvas and stream
+        const canvas = document.getElementById("qr-gen") as HTMLCanvasElement;
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = `${qrValue}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    };
+
     return (  
         <Grid>
             <Grid.Column width={8} verticalAlign='middle'>
@@ -70,11 +86,17 @@ export default observer(function UserSubscribeListItem({userSubscribe}: Props){
             </Grid.Column>
             <Grid.Column width={8}>
                 <Grid.Row>
-                    <Image  src={commonStore.imageBasePath + '/my-sub-info.png'} size='medium' centered />
+                    <QRCode
+                        id="qr-gen"
+                        value={qrValue}
+                        size={290}
+                        level={"H"}
+                        includeMargin={true}
+                    />
                 </Grid.Row>
-                    
-                    <Header as='h1' textAlign='center' content='Scan me!' spased='right'/>
-               
+                    <Button onClick={downloadQRCode}>
+                        Download QR Code
+                    </Button>
             </Grid.Column>
         </Grid>
     )
