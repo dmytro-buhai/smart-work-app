@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { Office } from "../models/office";
 import { useStore } from "../stores/store";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     office: Office
 }
 
 export default function OfficeListItem({office}: Props){
+    const { t } = useTranslation();
     const {officeStore} = useStore();
     const{userStore: {checkHostName, checkAdminName}} = useStore()
     const {deleteOffice, loading, updateOfficeIsFavoriteProp} = officeStore;
@@ -34,12 +36,12 @@ export default function OfficeListItem({office}: Props){
                             <Item.Description>
                                 <Icon name="phone volume" /> {office.phoneNumber}
                                 <br/>
-                                <Icon name="briefcase" /> Rooms amount: {office.rooms.length}
+                                <Icon name="briefcase" /> {t('officeItem.roomsAmount')}: {office.rooms.length}
                                 <br/>                                
                                 <Label as={Link} to='#' basic content={office.company.name}/>
                                 <br/> 
                                 <br/> 
-                                <div>Company description: <br/> {office.company.description}</div>
+                                <div> {t('officeItem.companyDescription')}: <br/> {office.company.description}</div>
                             </Item.Description>
                         </Item.Content>
                     </Item>
@@ -81,14 +83,14 @@ export default function OfficeListItem({office}: Props){
                     )
                 }
                 
-                <Button as={Link} to={`/offices/${office.id}`}  floated='right' content='View' color='blue' />
+                <Button as={Link} to={`/offices/${office.id}`}  floated='right' content={t('button.view')}  color='blue' />
                 {checkHostName(office.host) && 
                     <Button
                         name={office.id}
                         loading={loading && target === office.id}
                         onClick={(e) => handleOfficeDelete(e, office.id)} 
                         floated='right' 
-                        content='Delete' 
+                        content={t('button.delete')} 
                         color='red' 
                     />
                 }

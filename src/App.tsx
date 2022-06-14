@@ -17,8 +17,10 @@ import ServerError from './components/errors/ServerError';
 import ProfilePage from './components/users/ProfilePage';
 import CompanyForm from './forms/CompanyForm';
 import CompanyList from './components/CompanyList';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t } = useTranslation();
   const loaction = useLocation();
   const {commonStore, userStore} = useStore();
 
@@ -30,7 +32,7 @@ function App() {
     }
   }, [commonStore, userStore])
 
-  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
+  if (!commonStore.appLoaded) return <LoadingComponent content={t('loading.app')} />
 
   return (
     <>

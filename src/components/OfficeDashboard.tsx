@@ -8,8 +8,10 @@ import '../styles/officeDashboard.css';
 import LoadingComponent from './LoadingComponent';
 import OfficeFilters from './OfficeFilters';
 import OfficeList from './OfficeList';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function OfficeDashboard(){
+    const { t } = useTranslation();
     const {officeStore} = useStore();
     const {loadOffices, officeRegistry, 
            isAddedNewOffice, setIsAddedNewOffice, setPagingParams, pagination} = officeStore;
@@ -28,7 +30,7 @@ export default observer(function OfficeDashboard(){
         }
     }, [officeRegistry.size, isAddedNewOffice, setIsAddedNewOffice, loadOffices])
 
-    if (officeStore.loadingInitial && !loadingNext) return <LoadingComponent content='Loading offices...' />
+    if (officeStore.loadingInitial && !loadingNext) return <LoadingComponent content={t('loading.offices')} />
 
     return(
         <Grid>

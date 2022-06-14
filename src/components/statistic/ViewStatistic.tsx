@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Header, Icon, Table } from "semantic-ui-react"
 import { DetailStatistic } from "../../models/detailStatistic";
 import LoadingComponent from "../LoadingComponent";
+import { useTranslation } from 'react-i18next';
 
 interface Props{
     selectedStatistic: DetailStatistic | undefined
@@ -11,9 +12,9 @@ interface Props{
 export default observer(function ViewStatistic({selectedStatistic}: Props) {
     function randomNumber(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
+    }
 
-
+    const { t } = useTranslation();
     const [statData, setStatData] = useState<number[]>()
 
     useEffect(() => {
@@ -62,14 +63,16 @@ export default observer(function ViewStatistic({selectedStatistic}: Props) {
         <Table basic='very' celled collapsing>
             <Table.Header>
             <Table.Row>
-                <Table.HeaderCell>Day</Table.HeaderCell>
+                <Table.HeaderCell>{t('statistic.day')}</Table.HeaderCell>
                 <Table.HeaderCell>
-                    Office {selectedStatistic?.type} 
                     {selectedStatistic?.type === 'Lighting' &&
-                        <> (lumen/m2)</>
+                        <>{t('statistic.lumens')}</>
                     }
                     {selectedStatistic?.type === 'Climate' &&
-                        <> (°C)</>
+                        <>(°C)</>
+                    }
+                    {selectedStatistic?.type === 'Attendance' &&
+                        <>{t('statistic.attendance')}</>
                     }
                 </Table.HeaderCell>
             </Table.Row>

@@ -5,6 +5,7 @@ import OfficeForm from "../../forms/OfficeForm"
 import RoomForm from "../../forms/RoomForm"
 import { Office } from "../../models/office"
 import { useStore } from "../../stores/store"
+import { useTranslation } from 'react-i18next';
 
 const officeImageStyle = {
     filter: 'brightness(30%)'
@@ -24,6 +25,7 @@ interface Props{
 }
 
 export default observer(function OfficeDetaledHeader({office}: Props) {
+    const { t } = useTranslation();
     const{userStore: {checkHostName}, modalStore} = useStore();
 
     return(
@@ -58,17 +60,15 @@ export default observer(function OfficeDetaledHeader({office}: Props) {
                                 .openModal(<OfficeForm officeId={office.id} companyId={office.companyId}/>)} 
                             color='orange' 
                             floated='right'
-                            content='Manage Office'
+                            content={t('button.manageOffice')}
                         />
                         <Button 
                             onClick={() => modalStore.openModal(<RoomForm officeId={office.id}/>)}
                             positive
-                            content='Add room'
+                            content={t('button.addRoom')}
                         />
-    
                     </> 
                 }
-                
             </Segment>
         </Segment.Group>
     )

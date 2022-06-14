@@ -9,6 +9,7 @@ import { useStore } from "../stores/store";
 import OfficeDetaledSidebar from "./details/OfficeDetaledSidebar";
 import SubscribeDetailsFrom from "./details/SubscribeDetailsFrom";
 import LoginForm from "./users/LoginForm";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     room: Room
@@ -19,7 +20,8 @@ interface Props {
 
 export default observer(function RoomListItem({room,
     subscribeDetailsForDay, subscribeDetailsForWeek, subscribeDetailsForMonth}: Props){
-
+        
+    const { t } = useTranslation();
     const {subscribeStore} = useStore();
     const {userStore: {checkHostName, isLoggedIn}, modalStore} = useStore()
     const {statisticStore} = useStore();
@@ -55,15 +57,15 @@ export default observer(function RoomListItem({room,
                                         {room.name}
                                     </Item.Header>
                                     <Item.Description>
-                                        <Icon name="chart pie" color='yellow' /> Workplaces: {room.amountOfWorkplaces}
+                                        <Icon name="chart pie" color='yellow' /> {t('room.workplaces')}: {room.amountOfWorkplaces}
                                         <br/>
-                                        <Icon name="expand" color='orange' /> Square: {room.square}
+                                        <Icon name="expand" color='orange' /> {t('room.square')}: {room.square}
                                         <br/>
-                                        <Icon name='money' color='green' /> Subscribe for a day: {subscribeDetailsForDay?.price}
+                                        <Icon name='money' color='green' /> {t('subscribe.day')}: {subscribeDetailsForDay?.price}
                                         <br/>
-                                        <Icon name='money' color='green' /> Subscribe for a week: {subscribeDetailsForWeek?.price}
+                                        <Icon name='money' color='green' /> {t('subscribe.week')}: {subscribeDetailsForWeek?.price}
                                         <br/>
-                                        <Icon name='money' color='green' /> Subscribe for a month: {subscribeDetailsForMonth?.price}
+                                        <Icon name='money' color='green' /> {t('subscribe.month')}: {subscribeDetailsForMonth?.price}
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -71,7 +73,7 @@ export default observer(function RoomListItem({room,
                     </Segment>
                     <Segment>
                         <span>
-                            Room number: {room.number}
+                            {t('room.number')}: {room.number}
                         </span>
                     </Segment>
                     {!checkHostName(room.host) ?
@@ -81,7 +83,7 @@ export default observer(function RoomListItem({room,
                                     <Button 
                                         color='teal' 
                                         onClick={() =>  handleSubscribe()}
-                                        content='Subscribe'
+                                        content={t('button.subscribe')}
                                     />
                                 ) : (
                                     <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
@@ -92,7 +94,7 @@ export default observer(function RoomListItem({room,
                                         name={room.id}
                                         onClick={(event) => handleRoomViewStatistic(event, room.id)} 
                                         floated='right' 
-                                        content='View statistics' 
+                                        content={t('button.viewStatistic')} 
                                         color='blue' 
                                     />
                                 </span>
@@ -102,7 +104,7 @@ export default observer(function RoomListItem({room,
                                 <Button 
                                     color='orange' 
                                     onClick={() => modalStore.openModal(<RoomForm roomId={room.id} officeId={room.officeId} />)}
-                                    content='Edit'
+                                    content={t('button.edit')}
                                 />
                                 <span>
                                     <Button
@@ -110,7 +112,7 @@ export default observer(function RoomListItem({room,
                                         name={room.id}
                                         onClick={(event) => handleRoomViewStatistic(event, room.id)} 
                                         floated='right' 
-                                        content='View statistics' 
+                                        content={t('button.viewStatistic')}
                                         color='blue' 
                                     />
                                 </span>

@@ -6,8 +6,10 @@ import '../../index.css'
 import { useStore } from "../../stores/store";
 import LoadingComponent from "../LoadingComponent";
 import UserSubscribeListItem from "../UserSubscribeListItem";
+import { useTranslation } from 'react-i18next';
 
 export default observer(function ProfilePage() {
+    const { t } = useTranslation();
     const {commonStore, userStore, subscribeStore, modalStore} = useStore();
     const {user} = userStore;
     const {loadUserSubscribes, loadingUserSubscribes} = subscribeStore;
@@ -21,8 +23,8 @@ export default observer(function ProfilePage() {
         loadUserSubscribes();
     }, [commonStore, userStore, loadingUserSubscribes, loadUserSubscribes])
   
-    if (!commonStore.appLoaded) return <LoadingComponent content='Loading profile...' />
-    if (loadingUserSubscribes) return <LoadingComponent content='Loading subscribes...' />
+    if (!commonStore.appLoaded) return <LoadingComponent content={t('loading.profile')} />
+    if (loadingUserSubscribes) return <LoadingComponent content={t('loading.subscribes')} />
     
     return (
         <>
@@ -33,16 +35,16 @@ export default observer(function ProfilePage() {
                         <Item.Content verticalAlign="middle">
                             <Header as='h1' content={`${user?.username}`}/>
                             <Item.Description >
-                                <h3>{`Email: ${user?.email}`}</h3>
+                                <h3>{t('profile.email')}: {user?.email}</h3>
                             </Item.Description>
                             <Item.Extra>
-                                <h3>{`Phone number: ${user?.phoneNumber}`}</h3>
+                                <h3>{t('profile.phoneNumber')}: {user?.phoneNumber}</h3>
                             </Item.Extra>
                             <Button 
                                 floated='left'
                                 icon='edit'
                                 onClick={() => modalStore.openModal(<UserFrom />)} 
-                                content='Edit'
+                                content={t('button.edit')}
                                 color='teal'
                             />
                         </Item.Content>
