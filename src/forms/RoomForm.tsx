@@ -17,7 +17,7 @@ export default observer(function RoomForm({roomId, officeId}: Props){
     const {loadRoom, createRoom, updateRoom, 
         loading } = roomStore;
 
-    const[room, setRoom] = useState({
+    const[room, setRoom] = useState<Room>({
         id: 0,
         officeId: officeId,
         name: '',
@@ -25,7 +25,11 @@ export default observer(function RoomForm({roomId, officeId}: Props){
         square: 0,
         amountOfWorkplaces: 0,
         photoFileName: 'default_room_photo_file_name',
-        host: ''
+        host: '',
+        subscribeForDay: 0,
+        subscribeForWeek: 0,
+        subscribeForMonth: 0,
+        subscribeDetails: []
     });
 
     const validationSchema = Yup.object({
@@ -34,12 +38,21 @@ export default observer(function RoomForm({roomId, officeId}: Props){
         number: Yup.string().required('The room number is required')
                 .matches(/^\w+$/g,
                 "Please, specify a valid room number, for example, 1a"),
-        square: Yup.number()
+        square: Yup.string()
                 .required('The room square is required')
-                .min(0, 'min square size is 0'),
-        amountOfWorkplaces: Yup.number()
+                .matches(/^[1-9][0-9]*$/g, 'min square size is greater than 0'),
+        amountOfWorkplaces: Yup.string()
                 .required('The room amount of workplaces is required')
-                .min(0, 'min amount of workplaces is 0'),
+                .matches(/^[1-9][0-9]*$/g, 'min amount of workplaces is greater than 0'),
+        subscribeForDay: Yup.string()
+                .required('The room subscribe for a day is required')
+                .matches(/^[1-9][0-9]*$/g, 'subscribe price must be greater than 0'),
+        subscribeForWeek: Yup.string()
+                .required('The room subscribe for a week is required')
+                .matches(/^[1-9][0-9]*$/g, 'subscribe price must be greater than 0'),
+        subscribeForMonth: Yup.string()
+                .required('The room subscribe for a month is required')
+                .matches(/^[1-9][0-9]*$/g, 'subscribe price must be greater than 0'),
     })
 
     useEffect(() => {
@@ -49,6 +62,8 @@ export default observer(function RoomForm({roomId, officeId}: Props){
     }, [roomId, loadRoom, setRoom]);
 
     function handleFormSubmit(room: Room) {
+        console.log(room);
+        
         if(room.id === 0){
             room.host = user!.username;
             createRoom(room);
@@ -70,9 +85,11 @@ export default observer(function RoomForm({roomId, officeId}: Props){
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
                         <MyTextInput name='name' placeholder='Name'/>
                         <MyTextInput name='number' placeholder='Number' />
-                        <MyTextInput name='square' placeholder='Square' type='number' />
-                        <MyTextInput name='amountOfWorkplaces' placeholder='Amount of workplaces' type='number' />
-                       
+                        <MyTextInput name='square' placeholder='Square' />
+                        <MyTextInput name='amountOfWorkplaces' placeholder='Amount of workplaces' />
+                        <MyTextInput name='subscribeForDay' placeholder='Subscribe price for a day' />
+                        <MyTextInput name='subscribeForWeek' placeholder='Subscribe price for a week' />
+                        <MyTextInput name='subscribeForMonth' placeholder='Subscribe price for a month' />
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={loading} floated="right" 

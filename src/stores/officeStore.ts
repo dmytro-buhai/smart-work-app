@@ -5,6 +5,7 @@ import { CompanyOptions } from "../models/companyOptions";
 import { Office } from "../models/office";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Room } from "../models/room";
+import { SubscribeDetail } from "../models/SubscribeDetail";
 import { store } from "./store";
 
 export default class OfficeStore {
@@ -144,6 +145,39 @@ export default class OfficeStore {
             }
         }
     }
+
+    // updateSelectedOfficeRooms = (roomSubscribeDetails: SubscribeDetail[]) => {
+    //     roomSubscribeDetails.forEach(element => {
+    //         this.updateSelectedOfficeRoom(element);
+    //     });
+    // }
+
+    // updateSelectedOfficeRoom = (roomSubscribeDetails: SubscribeDetail) => {
+    //     console.log('updateSelectedOfficeRooms');
+        
+    //     if(this.selectedOffice === undefined) {
+    //         console.log('this.selectedOffice === undefined returned');
+    //         return;
+    //     }
+
+    //     let room = this.selectedOffice.rooms.find(r => r.id === roomSubscribeDetails.roomId);
+
+    //     if(room === undefined) {
+    //         console.log('room === undefined returned');
+    //         return;
+    //     }
+
+    //     if(room.subscribeDetails === null) {
+    //         room.subscribeDetails = [];
+    //         return;
+    //     }
+
+    //     if(room.subscribeDetails === undefined || room.subscribeDetails.length > 3) {
+    //         return;
+    //     }
+
+    //     room.subscribeDetails.push(roomSubscribeDetails);
+    // }
 
     private setOffice = (office: Office) => {
         this.officeRegistry.set(office.id, office);

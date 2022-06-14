@@ -1,4 +1,4 @@
-export interface SubscribeDetails{
+export interface SubscribeDetail{
     id: number;
     roomId: number;
     type: number;

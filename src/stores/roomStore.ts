@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { Office } from "../models/office";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Room } from "../models/room";
+import { SubscribeDetail } from "../models/SubscribeDetail";
 import { store } from "./store";
 
 export default class RoomStore {
@@ -41,7 +42,16 @@ export default class RoomStore {
         this.loadingInitial = true;
         try{
             room = await agent.Rooms.getRoomInfoById(id);
-            this.setRoom(room!);
+           
+            let subscribeForDay =  room.subscribeDetails!.find(r => r.type === 1)
+            let subscribeForWeek =  room.subscribeDetails!.find(r => r.type === 2)
+            let subscribeForMonth =  room.subscribeDetails!.find(r => r.type === 3)
+
+            room.subscribeForDay = subscribeForDay!.price;
+            room.subscribeForWeek = subscribeForWeek!.price;
+            room.subscribeForMonth = subscribeForMonth!.price;
+            
+            this.setRoom(room);
             runInAction(() =>{
                 this.selectedRoom = room;
             })
@@ -56,15 +66,14 @@ export default class RoomStore {
     createRoom = async (room: Room) => {
         this.loading = true;
         try{
-            let id = await agent.Rooms.create(room);
+            let newRoom = await agent.Rooms.create(room);
             runInAction(() => {
-                room.id = +id;
-                this.roomRegistry.set(room.id, room);
+                this.roomRegistry.set(newRoom.id, newRoom);
                 this.editMode = false;
                 this.loading = false;
             })
-            store.officeStore.addRoom(room);
-            store.subscribeStore.loadSubscribeDetailsForRooms([room])
+            store.officeStore.addRoom(newRoom);
+            store.subscribeStore.loadSubscribeDetailsForRoom(newRoom.id)
             store.modalStore.closeModal();
         }catch (error) {
             console.log(error);

@@ -9,7 +9,7 @@ import { PaginatedResult } from "../models/pagination";
 import { Profile } from "../models/profile";
 import { Room } from "../models/room";
 import { Statistic } from "../models/statistic";
-import { SubscribeDetails } from "../models/subscribeDetails";
+import { SubscribeDetail } from "../models/SubscribeDetail";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -120,8 +120,8 @@ const Offices = {
 }
 
 const Rooms = {
-    getRoomInfoById: (id: number) => requests.get<any>(`/Room/GetRoomInfoById/${id}`),
-    create: (room: Room) => requests.post<string>('Room/Add', room),
+    getRoomInfoById: (id: number) => requests.get<Room>(`/Room/GetRoomInfoById/${id}`),
+    create: (room: Room) => requests.post<Room>('Room/Add', room),
     update: (room: Room) => requests.put<string>('Room/Update', room),
     delete: (id: number) => requests.del<string>(`Room/Delete/${id}`),
 }
@@ -141,7 +141,8 @@ const Subscribe = {
 }
 
 const SubDetails = {
-    listByRooms: (roomIDs: number[]) => requests.post<SubscribeDetails[]>(`/SubscribeDetails/GetListForRooms`, roomIDs),
+    listByRooms: (roomIDs: number[]) => requests.post<SubscribeDetail[]>(`/SubscribeDetails/GetListForRooms`, roomIDs),
+    listByRoomId: (roomId: number) => requests.get<SubscribeDetail[]>(`/SubscribeDetails/GetByRoomId/${roomId}`),
 }
 
 const agent = {

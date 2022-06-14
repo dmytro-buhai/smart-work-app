@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react";
 import RoomForm from "../forms/RoomForm";
 import { Room } from "../models/room";
-import { SubscribeDetails } from "../models/subscribeDetails";
+import { SubscribeDetail } from "../models/SubscribeDetail";
 import { useStore } from "../stores/store";
 import OfficeDetaledSidebar from "./details/OfficeDetaledSidebar";
 import SubscribeDetailsFrom from "./details/SubscribeDetailsFrom";
@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
     room: Room
-    subscribeDetailsForDay: SubscribeDetails | undefined
-    subscribeDetailsForWeek: SubscribeDetails | undefined
-    subscribeDetailsForMonth: SubscribeDetails | undefined
+    subscribeDetailsForDay: SubscribeDetail | undefined
+    subscribeDetailsForWeek: SubscribeDetail | undefined
+    subscribeDetailsForMonth: SubscribeDetail | undefined
 }
 
 export default observer(function RoomListItem({room,

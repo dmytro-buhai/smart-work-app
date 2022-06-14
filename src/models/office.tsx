@@ -1,4 +1,5 @@
 import { Company } from "./company"
+import { Room } from "./room";
 
 export interface Office {
     id: number;

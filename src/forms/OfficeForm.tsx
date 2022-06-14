@@ -19,7 +19,7 @@ export default observer(function OfficeForm({officeId, companyId}: Props){
     const {createOffice, updateOffice, 
         loading, loadOffice,  setIsAddedNewOffice} = officeStore;
 
-    const[office, setOffice] = useState({
+    const[office, setOffice] = useState<Office>({
         id: 0,
         companyId: companyId,
         name: '',
