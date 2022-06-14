@@ -53,16 +53,18 @@ export default observer(function ProfilePage() {
                 </span>
             </Segment>
 
-            <Item>
-                <Item.Content verticalAlign='middle'>
-                    <Header as='h1' content="Subsribes" textAlign='center' size='huge' />
-                    <List>
-                        {subscribeStore.userSubscribes.map(sub => (
-                            <UserSubscribeListItem key={sub.id} userSubscribe={sub}/>
-                        ))}
-                    </List>                      
-                </Item.Content>
-            </Item>
+            {subscribeStore.userSubscribes.length > 0 &&
+                <Item>
+                    <Item.Content verticalAlign='middle'>
+                        <Header as='h1' content="Subsribes" textAlign='center' size='huge' />
+                        <List>
+                            {subscribeStore.userSubscribes.map(sub => (
+                                <UserSubscribeListItem key={sub.id} userSubscribe={sub}/>
+                            ))}
+                        </List>                      
+                    </Item.Content>
+                </Item>
+            }
         </> 
     )
 })
