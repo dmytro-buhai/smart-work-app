@@ -4,6 +4,7 @@ import { Button, Segment } from "semantic-ui-react"
 import { DetailStatistic } from "../../models/detailStatistic"
 import ViewStatistic from "../statistic/ViewStatistic";
 import { useTranslation } from 'react-i18next';
+import { useStore } from "../../stores/store";
 
 interface Props{
     selectedStatistic: DetailStatistic[] | undefined;
@@ -13,15 +14,17 @@ interface Props{
 
 export default observer(function OfficeDetaledSidebar({selectedStatistic, isCanBeShown, handleClose}: Props) {
     const { t } = useTranslation();
+    const{statisticStore} = useStore();
+    const{setSelectedStatisticType} = statisticStore;
     const[currentStatistic, setCurrentStatistic] = useState<DetailStatistic | undefined>(undefined)
 
     useEffect(() => {
         setCurrentStatistic(selectedStatistic?.at(0))
     }, [setCurrentStatistic, selectedStatistic])
 
-    function handleStatisitcSelecting(index: number) {
-        setCurrentStatistic(selectedStatistic?.at(index))
-    }
+    // function handleStatisitcSelecting(index: number) {
+    //     setCurrentStatistic(selectedStatistic?.at(index))
+    // }
 
     if (!isCanBeShown) {
         return <></>
@@ -50,21 +53,21 @@ export default observer(function OfficeDetaledSidebar({selectedStatistic, isCanB
             </Segment>
             <Segment attached clearing>
                 <span>
-                    <Button onClick={() => handleStatisitcSelecting(0)}
+                    <Button onClick={() => setSelectedStatisticType('Lighting')}
                         size='tiny'
                         content={t('statistic.lighting')} 
                         floated='left'
                     />
                 </span>
                 <span>
-                    <Button onClick={() => handleStatisitcSelecting(1)}
+                    <Button onClick={() => setSelectedStatisticType('Climate')}
                         size='tiny'
                         content={t('statistic.climate')} 
                         floated='left'
                     />
                 </span>
                 <span>
-                    <Button onClick={() => handleStatisitcSelecting(2)}
+                    <Button onClick={() => setSelectedStatisticType('Attendance')}
                         size='tiny'
                         content={t('statistic.attendance')} 
                         floated='left'
