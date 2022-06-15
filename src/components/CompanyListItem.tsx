@@ -34,16 +34,14 @@ export default function CompanyListItem({company}: Props){
                             <Item.Description>
                                 <Icon name="phone volume" /> {company.phoneNumber}
                                 <br/>
-                                <Icon name="address card outline" /> {company.address}                    
+                                <Icon name="address card outline" /> {company.address}   
+                                <br/>
+                                <br/>  
+                                Dscription: <br/> {company.description}               
                             </Item.Description>
                         </Item.Content>
                     </Item>
                 </Item.Group>
-            </Segment>
-            <Segment>
-                <span>
-                    {company.description} 
-                </span>
             </Segment>
             {checkHostName(company.host) &&  
                 <Segment clearing>

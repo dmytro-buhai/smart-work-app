@@ -83,13 +83,17 @@ export default observer(function RoomForm({roomId, officeId}: Props){
                 {({handleSubmit, isValid, isSubmitting, dirty}) => (
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
-                        <MyTextInput name='name' placeholder='Name'/>
-                        <MyTextInput name='number' placeholder='Number' />
-                        <MyTextInput name='square' placeholder='Square' />
-                        <MyTextInput name='amountOfWorkplaces' placeholder='Amount of workplaces' />
-                        <MyTextInput name='subscribeForDay' placeholder='Subscribe price for a day' />
-                        <MyTextInput name='subscribeForWeek' placeholder='Subscribe price for a week' />
-                        <MyTextInput name='subscribeForMonth' placeholder='Subscribe price for a month' />
+                        <MyTextInput label='Room name' name='name' placeholder='Name'/>
+                        <MyTextInput label='Room number' name='number' placeholder='Number' />
+                        <MyTextInput label='Square'  name='square' placeholder='Square' />
+                        <MyTextInput label='Amount of workplaces' 
+                            name='amountOfWorkplaces' placeholder='Amount of workplaces' />
+                        <MyTextInput label='Subscribe price for a day' 
+                            name='subscribeForDay' placeholder='Subscribe price for a day' />
+                        <MyTextInput label='Subscribe price for a week' 
+                            name='subscribeForWeek' placeholder='Subscribe price for a week' />
+                        <MyTextInput label='Subscribe price for a month' 
+                            name='subscribeForMonth' placeholder='Subscribe price for a month' />
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={loading} floated="right" 

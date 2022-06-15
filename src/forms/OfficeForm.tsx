@@ -78,9 +78,9 @@ export default observer(function OfficeForm({officeId, companyId}: Props){
                 {({handleSubmit, isValid, isSubmitting, dirty}) => (
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
-                        <MyTextInput name='name' placeholder='Name'/>
-                        <MyTextInput name='address' placeholder='Address' />
-                        <MyTextInput name='phoneNumber' type="tel" placeholder='PhoneNumber' />
+                        <MyTextInput label='Office name' name='name' placeholder='Name'/>
+                        <MyTextInput label='Address' name='address' placeholder='Address' />
+                        <MyTextInput label='Phone number' name='phoneNumber' type="tel" placeholder='PhoneNumber' />
                        
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}

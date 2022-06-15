@@ -67,10 +67,10 @@ export default observer(function CompanyForm(){
                 {({handleSubmit, isValid, isSubmitting, dirty}) => (
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
-                        <MyTextInput name='name' placeholder='Name'/>
-                        <MyTextInput name='description' placeholder='Description' />
-                        <MyTextInput name='address' placeholder='Address' />
-                        <MyTextInput name='phoneNumber' type="tel" placeholder='PhoneNumber' />
+                        <MyTextInput label='Company name' name='name' placeholder='Name'/>
+                        <MyTextInput label='Description' name='description' placeholder='Description' />
+                        <MyTextInput label='Address' name='address' placeholder='Address' />
+                        <MyTextInput label='Phone number' name='phoneNumber' type="tel" placeholder='PhoneNumber' />
                        
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}

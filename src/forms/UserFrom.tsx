@@ -43,9 +43,9 @@ export default observer(function UserForm(){
                 {({handleSubmit, isValid, isSubmitting, dirty}) => (
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='username' placeholder='Username' hidden={true}/>
-                        <MyTextInput name='email' placeholder='Email' type='email'/>
-                        <MyTextInput name='displayName' placeholder='Display name' />
-                        <MyTextInput name='phoneNumber' placeholder='Phone number' type='tel' />
+                        <MyTextInput label='Email' name='email' placeholder='Email' type='email'/>
+                        <MyTextInput label='Display name' name='displayName' placeholder='Display name' />
+                        <MyTextInput label='Phone number' name='phoneNumber' placeholder='Phone number' type='tel' />
                        
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}
