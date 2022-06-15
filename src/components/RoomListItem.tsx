@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react";
 import RoomForm from "../forms/RoomForm";
@@ -23,11 +23,13 @@ export default observer(function RoomListItem({room,
         
     const { t } = useTranslation();
     const {subscribeStore} = useStore();
-    const {userStore: {checkHostName, isLoggedIn}, modalStore} = useStore()
+    const {userStore: {checkHostName, isLoggedIn}, modalStore, roomStore: {loading, deleteRoom}} = useStore();
     const {statisticStore} = useStore();
     
     const {loadStatisticsForRoom, currentSelectedStatistic, selectedRoomId, setSelectedRoomId} = statisticStore;
     const {getSubscribeDetailsForRoom} = subscribeStore;
+
+    const[target, setTarget] = useState(0);
 
     function handleSubscribe() {
         room.subscribeDetails = getSubscribeDetailsForRoom(room.id);
@@ -38,6 +40,11 @@ export default observer(function RoomListItem({room,
         const button: HTMLButtonElement = event.currentTarget;
         console.log(button);
         loadStatisticsForRoom(id);
+    }
+
+    function handleRoomDelete(e: SyntheticEvent<HTMLButtonElement>, id: number){
+        setTarget(+e.currentTarget.name);
+        deleteRoom(id);
     }
 
     function handleClose(){
@@ -105,6 +112,13 @@ export default observer(function RoomListItem({room,
                                     color='orange' 
                                     onClick={() => modalStore.openModal(<RoomForm roomId={room.id} officeId={room.officeId} />)}
                                     content={t('button.edit')}
+                                />
+                                <Button 
+                                    name={room.id}
+                                    loading={loading && target === room.id}
+                                    onClick={(e) => handleRoomDelete(e, room.id)}
+                                    content={t('button.delete')}
+                                    color='red' 
                                 />
                                 <span>
                                     <Button

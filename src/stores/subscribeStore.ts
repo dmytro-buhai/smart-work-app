@@ -66,6 +66,20 @@ export default class SubscribeStore {
         this.subscribeDetailsRegistry.set(subscribeDetails.id, subscribeDetails);
     }
 
+    updateRoomSubscribeDetails = (subscribeDetails: SubscribeDetail[]) => {
+        console.log(Array.from(this.subscribeDetailsRegistry.values()).map(sd => sd.id));
+        console.log(Array.from(subscribeDetails.values()).map(sd => sd.id));
+
+        try{
+            this.subscribeDetailsRegistry.set(subscribeDetails[0].id, subscribeDetails[0]);
+            this.subscribeDetailsRegistry.set(subscribeDetails[1].id, subscribeDetails[1]);
+            this.subscribeDetailsRegistry.set(subscribeDetails[2].id, subscribeDetails[2]);
+        } catch(error) {
+            console.log(error);
+            
+        }
+    }
+
     private setUserSubscribe = (userSubscribe: InfoUserSubscribe) => {
         userSubscribe.startDate = userSubscribe.startDate.split('T')[0];
         userSubscribe.endDate = userSubscribe.endDate.split('T')[0];

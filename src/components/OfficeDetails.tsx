@@ -13,6 +13,7 @@ export default observer(function OfficeDetails(){
     const { t } = useTranslation();
     const {officeStore} = useStore();
     const {subscribeStore} = useStore();
+    const {roomStore: {loadingRooms, roomRegistry}} = useStore();
     const {selectedOffice: office, loadOffice, loadingInitial} = officeStore;
     const {loadSubscribeDetailsForRooms, subscribeDetails, loadingSubscribeDetails} = subscribeStore;
     const {id} = useParams<{id: string}>();
@@ -24,9 +25,9 @@ export default observer(function OfficeDetails(){
                 loadSubscribeDetailsForRooms(office?.rooms);
             }
         }
-    }, [id, office, subscribeDetails, loadingInitial, loadingSubscribeDetails, loadOffice, loadSubscribeDetailsForRooms]);
+    }, [id, office, roomRegistry, subscribeDetails, loadingInitial, loadingSubscribeDetails, loadOffice, loadSubscribeDetailsForRooms]);
 
-    if(loadingInitial || !office) return <LoadingComponent content={t('loading.rooms')} />
+    if(loadingInitial || !office || loadingRooms) return <LoadingComponent content={t('loading.rooms')} />
     if(loadingSubscribeDetails) return <LoadingComponent content={t('loading.subscribeDetails')} />
 
     return(

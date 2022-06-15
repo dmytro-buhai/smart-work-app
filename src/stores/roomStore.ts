@@ -11,7 +11,7 @@ export default class RoomStore {
     selectedRoom: Room | undefined = undefined;
     editMode = false;
     loading = false;
-    loadingInitial = true;
+    loadingRooms = false;
     isAddedNewRoom = false;
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
@@ -29,18 +29,31 @@ export default class RoomStore {
         return this.roomRegistry.get(id);
     }
 
-    setLoadingInitial = (state: boolean) => {
-        this.loadingInitial = state;
+    setLoadingRooms = (state: boolean) => {
+        this.loadingRooms = state;
     }
 
     loadRoom = async (id: number) => {
         let room = (store.officeStore.selectedOffice?.rooms as Room[]).find(r => r.id === id)
         if(room){
+            let subscribeDetails = store.subscribeStore.subscribeDetails.filter(sd => sd.roomId === id)
+
+            let subscribeForDay =  subscribeDetails?.find(sd => sd.type === 1)
+            let subscribeForWeek =  subscribeDetails?.find(sd => sd.type === 2)
+            let subscribeForMonth =  subscribeDetails?.find(sd => sd.type === 3)
+
+            room.subscribeForDay = subscribeForDay?.price;
+            room.subscribeForWeek = subscribeForWeek?.price;
+            room.subscribeForMonth = subscribeForMonth?.price;
+            
+            room.subscribeDetails = subscribeDetails;
+
             this.selectedRoom = room;
+            this.setLoadingRooms(false);
             return room;
         }
-        this.loadingInitial = true;
         try{
+            this.setLoadingRooms(true);
             room = await agent.Rooms.getRoomInfoById(id);
            
             let subscribeForDay =  room.subscribeDetails!.find(r => r.type === 1)
@@ -55,11 +68,11 @@ export default class RoomStore {
             runInAction(() =>{
                 this.selectedRoom = room;
             })
-            this.setLoadingInitial(false);
+            this.setLoadingRooms(false);
             return room;
         } catch (error: any) {
             console.log(error)
-            this.setLoadingInitial(false);
+            this.setLoadingRooms(false);
         }
     }
 
@@ -86,14 +99,21 @@ export default class RoomStore {
     updateRoom = async (room: Room) => {
         this.loading = true;
         try{
+            room = this.updateUserSubDetails(room)
+
             await agent.Rooms.update(room);
+            
+            console.log(room);
+
             runInAction(() => {
                 this.roomRegistry.set(room.id, room);
                 this.selectedRoom = room;
                 this.editMode = false;
                 this.loading = false;
             })
+
             store.officeStore.updateRoom(room);
+            store.subscribeStore.updateRoomSubscribeDetails(room.subscribeDetails);
             store.modalStore.closeModal();
         }catch (error) {
             console.log(error);
@@ -103,19 +123,26 @@ export default class RoomStore {
         }
     }
 
+    private updateUserSubDetails = (room: Room) => {
+        room.subscribeDetails[0]!.price = room.subscribeForDay!;
+        room.subscribeDetails[1]!.price = room.subscribeForWeek!;
+        room.subscribeDetails[2]!.price = room.subscribeForMonth!;
+
+        return room;
+    }
+
     deleteRoom = async (id: number) => {
-        this.loading = true;
+        this.setLoadingRooms(true);
         try{
             await agent.Rooms.delete(id);
             runInAction(() => {
                 this.roomRegistry.delete(id);
-                this.loading = false;
             })
+            this.setLoadingRooms(false);
+            store.commonStore.reloadPage();
         }catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.loading = false;
-            })
+            this.setLoadingRooms(false);
         }
     }
 }
