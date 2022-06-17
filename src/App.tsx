@@ -17,8 +17,10 @@ import ServerError from './components/errors/ServerError';
 import ProfilePage from './components/users/ProfilePage';
 import CompanyForm from './forms/CompanyForm';
 import CompanyList from './components/CompanyList';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t } = useTranslation();
   const loaction = useLocation();
   const {commonStore, userStore} = useStore();
 
@@ -30,7 +32,7 @@ function App() {
     }
   }, [commonStore, userStore])
 
-  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
+  if (!commonStore.appLoaded) return <LoadingComponent content={t('loading.app')} />
 
   return (
     <>
@@ -47,7 +49,6 @@ function App() {
                 <Route exact path='/offices' component={OfficeDashboard} />
                 <Route exact path='/companies' component={CompanyList} />
                 <Route path='/offices/:id' component={OfficeDetails} />
-                <Route key={loaction.key} path={['/addOffice', '/manage/:id']} component={OfficeForm} />
                 <Route key={loaction.key} path={['/addCompany', '/manageCompany/:id']} component={CompanyForm} />
                 <Route path='/profile/:username' component={ProfilePage} />
                 <Route path='/login' component={LoginForm} />

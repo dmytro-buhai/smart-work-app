@@ -8,6 +8,7 @@ export default class StatisticStore {
     selectedRoomId: number | undefined;
     loadingInitial = true;
     loading = false;
+    selectedStatisticType: string = "Attendance";
 
     constructor() {
         makeAutoObservable(this)
@@ -15,6 +16,16 @@ export default class StatisticStore {
 
     get currentSelectedStatistic() {
         return this.selectedStatistic;
+    }
+
+    get groupedCurrentSelectedStatistic() {
+        return Object.entries(
+            this.currentSelectedStatistic!.reduce((statistics, statistic) => {
+                const type = statistic.type;
+                statistics[type] = statistics[type] ? [...statistics[type], statistic] : [statistic];
+                return statistics;
+            }, {} as {[key: string]: DetailStatistic[]})
+        )
     }
 
     get statistics(){
@@ -47,6 +58,10 @@ export default class StatisticStore {
                 this.setLoading(false);
             }
         }
+    }
+
+    setSelectedStatisticType = (state: string) => {
+        this.selectedStatisticType  = state;
     }
 
     setLoadingInitial = (state: boolean) => {

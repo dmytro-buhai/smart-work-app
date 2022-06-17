@@ -1,12 +1,15 @@
 import { observer } from "mobx-react-lite"
 import { Grid, Icon, Segment } from "semantic-ui-react"
 import { Office } from "../../models/office"
+import { useTranslation } from 'react-i18next';
 
 interface Props{
     office: Office
 }
 
 export default observer(function OfficeDetaledInfo({office}: Props) {
+    const { t } = useTranslation();
+    
     return(
         <Segment.Group>
             <Segment attached='top'>
@@ -26,7 +29,7 @@ export default observer(function OfficeDetaledInfo({office}: Props) {
                     </Grid.Column>
                     <Grid.Column width={15}>
                         <span>
-                            Rooms amount: {office.rooms.length}
+                            {t('room.amount')}: {office.rooms.length}
                         </span>
                     </Grid.Column>
                 </Grid>

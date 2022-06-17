@@ -1,6 +1,5 @@
 import { ErrorMessage, Formik } from "formik";
-import { Button, Form, Header, Input, Item, Label, Segment } from "semantic-ui-react";
-import MyTextInput from "../../forms/MyTextInput";
+import { Button, Form, Header } from "semantic-ui-react";
 import { Room } from "../../models/room";
 import { useStore } from "../../stores/store";
 import ValidationErrors from "../errors/ValidationErrors";

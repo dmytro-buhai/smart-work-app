@@ -6,6 +6,8 @@ import { store } from "./store";
 
 export default class UserStore {
     user: User | null = null;
+    loading: boolean = false;
+    adminHostName: string = 'admin'
 
     constructor() {
         makeAutoObservable(this)
@@ -26,6 +28,7 @@ export default class UserStore {
             runInAction(() => this.user = user);
             store.modalStore.closeModal();
             store.subscribeStore.loadUserSubscribes();
+            store.commonStore.reloadPage();
         } catch(error){
             throw(error);
         }
@@ -35,6 +38,7 @@ export default class UserStore {
         store.commonStore.setToken(null);
         window.localStorage.removeItem('jwt');
         this.user = null;
+        store.commonStore.reloadPage();
     }
 
     getUser = async () => {
@@ -46,6 +50,16 @@ export default class UserStore {
         }
     }
 
+    checkHostName = (host: string | null) => {
+        return this.user?.username === this.adminHostName ?
+                                       true :
+                                       this.user?.username === host;
+    }
+
+    checkAdminName = () => {
+        return this.user?.username === this.adminHostName;                          
+    }
+
     register = async (creds: UserFormValues) => {
         try{
             const user = await agent.Account.register(creds);
@@ -55,5 +69,23 @@ export default class UserStore {
         } catch(error){
             throw(error);
         }
+    }
+
+    update = async (user: User) => {
+        this.setLoading(true);
+        try{
+            await agent.Account.update(user);
+            this.user = await agent.Account.current()
+            this.setLoading(false);
+            store.modalStore.closeModal();
+        } catch(error){
+            this.setLoading(false);
+            store.modalStore.closeModal();
+            throw(error);
+        }
+    }
+
+    private setLoading = (state: boolean) => {
+        this.loading = state;
     }
 }

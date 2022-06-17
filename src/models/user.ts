@@ -1,9 +1,11 @@
 export {}
 
 export interface User {
+    email: string;
     username: string;
     displayName: string;
     token: string;
+    phoneNumber: string;
     image?: string;
 }
 

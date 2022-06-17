@@ -1,27 +1,17 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Segment, Image, Item, Header, Grid, GridColumn, Icon, Button, List, Divider } from "semantic-ui-react";
+import { Segment, Item, Header, List, Button } from "semantic-ui-react";
+import UserFrom from "../../forms/UserFrom";
 import '../../index.css'
 import { useStore } from "../../stores/store";
 import LoadingComponent from "../LoadingComponent";
 import UserSubscribeListItem from "../UserSubscribeListItem";
-
-const officeImageStyle = {
-    filter: 'brightness(30%)'
-}
-
-const officeImageTextStyle = {
-    position: 'absolute',
-    bottom: '5%',
-    left: '5%',
-    wifth: '100%',
-    heigth: 'auto',
-    color: 'white'
-}
+import { useTranslation } from 'react-i18next';
 
 export default observer(function ProfilePage() {
-    const {commonStore, userStore, subscribeStore} = useStore();
+    const { t } = useTranslation();
+    const {commonStore, userStore, subscribeStore, modalStore} = useStore();
+    const {user} = userStore;
     const {loadUserSubscribes, loadingUserSubscribes} = subscribeStore;
     
     useEffect(() => {
@@ -33,33 +23,50 @@ export default observer(function ProfilePage() {
         loadUserSubscribes();
     }, [commonStore, userStore, loadingUserSubscribes, loadUserSubscribes])
   
-    if (!commonStore.appLoaded) return <LoadingComponent content='Loading profile...' />
-    if (loadingUserSubscribes) return <LoadingComponent content='Loading subscribes...' />
+    if (!commonStore.appLoaded) return <LoadingComponent content={t('loading.profile')} />
+    if (loadingUserSubscribes) return <LoadingComponent content={t('loading.subscribes')} />
     
     return (
         <>
-            <Segment>
+            <Segment clearing>
                 <Item.Group>
                     <Item>
                         <Item.Image avatar src={`${commonStore.imageBasePath}/user.png`} />
-                        
                         <Item.Content verticalAlign="middle">
-                            <Header as='h1' content="Bob"/>
+                            <Header as='h1' content={`${user?.username}`}/>
+                            <Item.Description >
+                                <h3>{t('profile.email')}: {user?.email}</h3>
+                            </Item.Description>
+                            <Item.Extra>
+                                <h3>{t('profile.phoneNumber')}: {user?.phoneNumber}</h3>
+                            </Item.Extra>
+                            <Button 
+                                floated='left'
+                                icon='edit'
+                                onClick={() => modalStore.openModal(<UserFrom />)} 
+                                content={t('button.edit')}
+                                color='teal'
+                            />
                         </Item.Content>
                     </Item>
                 </Item.Group>
+                <span>
+                
+                </span>
             </Segment>
 
-            <Item>
-                <Item.Content verticalAlign='middle'>
-                    <Header as='h1' content="Subsribes" textAlign='center' size='huge' />
-                    <List>
-                        {subscribeStore.userSubscribes.map(sub => (
-                            <UserSubscribeListItem key={sub.id} userSubscribe={sub}/>
-                        ))}
-                    </List>                      
-                </Item.Content>
-            </Item>
+            {subscribeStore.userSubscribes.length > 0 &&
+                <Item>
+                    <Item.Content verticalAlign='middle'>
+                        <Header as='h1' content="Subsribes" textAlign='center' size='huge' />
+                        <List>
+                            {subscribeStore.userSubscribes.map(sub => (
+                                <UserSubscribeListItem key={sub.id} userSubscribe={sub}/>
+                            ))}
+                        </List>                      
+                    </Item.Content>
+                </Item>
+            }
         </> 
     )
 })

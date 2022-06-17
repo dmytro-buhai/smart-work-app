@@ -2,12 +2,12 @@ import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { InfoUserSubscribe } from "../models/infoUserSubscribe";
 import { Room } from "../models/room";
-import { SubscribeDetails } from "../models/subscribeDetails";
+import { SubscribeDetail } from "../models/SubscribeDetail";
 import { store } from "./store";
 
 export default class SubscribeStore {
     subscribesRegistry = new Map<number, InfoUserSubscribe>();
-    subscribeDetailsRegistry = new Map<number, SubscribeDetails>();
+    subscribeDetailsRegistry = new Map<number, SubscribeDetail>();
     loadingSubscribeDetails = true;
     loadingUserSubscribes = true;
 
@@ -38,7 +38,7 @@ export default class SubscribeStore {
         return Array.from(this.subscribeDetailsRegistry.values()).filter(sd => sd.type === 3);
     }
 
-    loadSubscribeDetailsForRooms = async(rooms: Room[]) => {
+    loadSubscribeDetailsForRooms = async(rooms: Room[]) => { 
         try{
             const roomsSubscribeDetails = await agent.SubDetails.listByRooms(rooms.map(r => r.id));
             roomsSubscribeDetails.forEach(item => {
@@ -50,9 +50,34 @@ export default class SubscribeStore {
             this.setLoadingSubscribeDetails(false);
         }
     }
+    
+    loadSubscribeDetailsForRoom = async(roomId: number) => {
+        try{
+            const roomSubscribeDetails = await agent.SubDetails.listByRoomId(roomId);
+            roomSubscribeDetails.forEach(item => {
+                this.setSubscribeDetails(item);
+            });        
+        } catch (error){
+            console.log(error);
+        }
+    }
 
-    private setSubscribeDetails = (subscribeDetails: SubscribeDetails) => {
+    private setSubscribeDetails = (subscribeDetails: SubscribeDetail) => {
         this.subscribeDetailsRegistry.set(subscribeDetails.id, subscribeDetails);
+    }
+
+    updateRoomSubscribeDetails = (subscribeDetails: SubscribeDetail[]) => {
+        console.log(Array.from(this.subscribeDetailsRegistry.values()).map(sd => sd.id));
+        console.log(Array.from(subscribeDetails.values()).map(sd => sd.id));
+
+        try{
+            this.subscribeDetailsRegistry.set(subscribeDetails[0].id, subscribeDetails[0]);
+            this.subscribeDetailsRegistry.set(subscribeDetails[1].id, subscribeDetails[1]);
+            this.subscribeDetailsRegistry.set(subscribeDetails[2].id, subscribeDetails[2]);
+        } catch(error) {
+            console.log(error);
+            
+        }
     }
 
     private setUserSubscribe = (userSubscribe: InfoUserSubscribe) => {

@@ -11,7 +11,7 @@ import { Company } from '../models/company';
 
 export default observer(function CompanyForm(){
     const history = useHistory();
-    const {companyStore} = useStore();
+    const {companyStore, userStore: {user}} = useStore();
     const {createCompany, updateCompany, 
         loading, loadCompany, loadingInitial, setIsAddedNewCompany} = companyStore;
     const {id} = useParams<{id: string}>();
@@ -23,6 +23,7 @@ export default observer(function CompanyForm(){
         phoneNumber: '',
         description: '',
         photoFileName: 'default_company_photo_file_name',
+        host: ''
     });
 
     const validationSchema = Yup.object({
@@ -46,7 +47,8 @@ export default observer(function CompanyForm(){
 
     function handleFormSubmit(company: Company) {
         if(company.id === 0){
-            createCompany(company).then((companyId) => {setIsAddedNewCompany(true); history.push(`/companies/${companyId}`)});
+            company.host = user!.username;
+            createCompany(company).then(() => {setIsAddedNewCompany(true); history.push('/companies')});
         } else {
             updateCompany(company).then(() => { history.push(`/companies/${company.id}`) });
         }      
@@ -65,10 +67,10 @@ export default observer(function CompanyForm(){
                 {({handleSubmit, isValid, isSubmitting, dirty}) => (
                     <Form onSubmit={handleSubmit} autoComplete='off'>
                         <MyTextInput name='id' placeholder='Id' hidden={true}/>
-                        <MyTextInput name='name' placeholder='Name'/>
-                        <MyTextInput name='description' placeholder='Description' />
-                        <MyTextInput name='address' placeholder='Address' />
-                        <MyTextInput name='phoneNumber' type="tel" placeholder='PhoneNumber' />
+                        <MyTextInput label='Company name' name='name' placeholder='Name'/>
+                        <MyTextInput label='Description' name='description' placeholder='Description' />
+                        <MyTextInput label='Address' name='address' placeholder='Address' />
+                        <MyTextInput label='Phone number' name='phoneNumber' type="tel" placeholder='PhoneNumber' />
                        
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}

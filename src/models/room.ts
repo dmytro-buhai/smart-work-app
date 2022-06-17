@@ -1,5 +1,5 @@
 import { Statistic } from "./statistic";
-import { SubscribeDetails } from "./subscribeDetails";
+import { SubscribeDetail } from "./SubscribeDetail";
 
 export interface Room {
     id: number;
@@ -10,6 +10,10 @@ export interface Room {
     amountOfWorkplaces: number;
     photoFileName: string;
     equipment?: any;
-    statistics: Statistic[];
-    subscribeDetails: SubscribeDetails[];
+    statistics?: Statistic[];
+    subscribeDetails: SubscribeDetail[];
+    host: string;
+    subscribeForDay?: number;
+    subscribeForWeek?: number;
+    subscribeForMonth?: number;
 }
