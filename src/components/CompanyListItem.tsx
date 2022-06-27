@@ -3,14 +3,15 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Item, Segment } from "semantic-ui-react";
 import OfficeForm from "../forms/OfficeForm";
 import { Company } from "../models/company";
-
 import { useStore } from "../stores/store";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     company: Company
 }
 
 export default function CompanyListItem({company}: Props){
+    const { t, i18n } = useTranslation();
     const {companyStore, modalStore, userStore: {checkHostName}} = useStore();
     const {deleteCompany, loading} = companyStore;
 
@@ -37,7 +38,7 @@ export default function CompanyListItem({company}: Props){
                                 <Icon name="address card outline" /> {company.address}   
                                 <br/>
                                 <br/>  
-                                Dscription: <br/> {company.description}               
+                                {t('companies.description')}: <br/> {company.description}               
                             </Item.Description>
                         </Item.Content>
                     </Item>

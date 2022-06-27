@@ -3,8 +3,10 @@ import { observer } from "mobx-react-lite"
 import { Button, Form, Header, Label } from "semantic-ui-react"
 import MyTextInput from "../../forms/MyTextInput"
 import { useStore } from "../../stores/store"
+import { useTranslation } from 'react-i18next';
 
 export default observer(function LoginForm() {
+    const { t } = useTranslation();
     const {userStore} = useStore();
 
     return (
@@ -15,7 +17,7 @@ export default observer(function LoginForm() {
         >
             {({handleSubmit, isSubmitting, errors}) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h2' content='Login to SwartWork' color='teal' textAlign='center' />
+                    <Header as='h2' content={t('login')} color='teal' textAlign='center' />
                     <MyTextInput name='email' placeholder='Email' type='email' />
                     <MyTextInput name='password' placeholder='Password' type='password' />
                     <ErrorMessage 

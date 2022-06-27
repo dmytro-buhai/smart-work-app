@@ -33,11 +33,12 @@ export default observer(function NavBar(){
                 <Menu.Item position='right'>
                     {isLoggedIn === false ? (
                         <>
-                            <Button onClick={() => modalStore.openModal(<LoginForm />, 'mini')} size='huge' inverted>
-                                Login
+                            <Button color='blue' onClick={() => modalStore.openModal(<LoginForm />, 'mini')} style={{marginRight: '5px'}} size='huge'>
+                                {t('button.login')}
                             </Button>
-                            <Button onClick={() => modalStore.openModal(<RegisterForm />, 'mini')} size='huge' inverted>
-                                Register
+                            
+                            <Button color='yellow' onClick={() => modalStore.openModal(<RegisterForm />, 'mini')} size='huge'>
+                                {t('button.register')}
                             </Button>
                         </>
                     ) : (

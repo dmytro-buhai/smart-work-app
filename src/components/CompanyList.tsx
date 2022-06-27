@@ -8,8 +8,10 @@ import { useStore } from '../stores/store';
 import '../styles/officeList.css';
 import CompanyListItem from './CompanyListItem';
 import LoadingComponent from './LoadingComponent';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function CompanyList(){
+    const { t } = useTranslation();
     const {companyStore} = useStore();
     const {companies} = companyStore;
 
@@ -30,7 +32,7 @@ export default observer(function CompanyList(){
         }
     }, [companyRegistry.size, isAddedNewCompany, setIsAddedNewCompany, loadCompanies])
 
-    if (companyStore.loadingInitial && !loadingNext) return <LoadingComponent content='Loading companies...' />
+    if (companyStore.loadingInitial && !loadingNext) return <LoadingComponent content={t('loading.companies')} />
 
     return(
         <Grid centered>

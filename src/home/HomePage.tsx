@@ -1,21 +1,24 @@
 import { Link } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import '../styles/homePage.css';
+import { useTranslation } from 'react-i18next';
 
 export default function HomePage(){
+    const { t } = useTranslation();
+
     return(
         <div className="homePage">
             <Container style={{paddingTop: '7em'}}>
                 <div className="homeTitle">
                     <h1 className="ui header">
-                        SmartWork. Find your place to work
-                        <div className="sub header">Just check out the offices we have and let's subscribe to a place to work :)</div>
+                        {t('home.title')}
+                        <div className="sub header">{t('home.subtitle')}</div>
                     </h1>
                     <br />
                     <br />
-                    <p>The software system of flexible selection of the workplace in coworking aims to provide a comfortable search for the coworking area, and the detail information about the workspace that is considering. SmartWork provides for the organization of transparent access to the review of technical and material equipment of the coworking area, available rooms, statistic of their temperature, lighting and attendance.</p>
+                    <p>{t('home.description')}</p>
                     <br />
-                    <h3>Go to <Link to='/offices'>Offices</Link></h3>
+                    <h3>{t('home.goTo')} <Link to='/offices'>{t('home.offices')} </Link></h3>
                 </div>
             </Container>
         </div>

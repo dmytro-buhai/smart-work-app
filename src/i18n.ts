@@ -19,9 +19,12 @@ i18n
     resources: {
       en: {
         translation: {
+          login: 'Login to SmartWork',
+          register: 'Sign up to SwartWork',
           loading: {
             app: 'Loading app...',
             offices: 'Loading offices...',
+            companies: 'Loading companies...',
             rooms: 'Loading office rooms...',
             subscribeDetails: 'Loading subscribe details...',
             profile: 'Loading profile...',
@@ -36,7 +39,8 @@ i18n
           },
           companies: {
             title: 'Companies',
-            addBtn: 'Add company'
+            addBtn: 'Add company',
+            description: 'Description'
           },
           offices: {
             name: 'Office'
@@ -76,18 +80,30 @@ i18n
             addRoom: 'Add room',
             manageOffice: 'Manage office',
             viewStatistic: 'View statistic',
-            subscribe: 'Subscribe'
+            subscribe: 'Subscribe',
+            login: 'Login',
+            register: 'Register'
           },
           officeItem: {
             roomsAmount: 'Rooms amount',
             companyDescription: 'Company description'
+          },
+          home: {
+            title: 'SmartWork. Find your place to work',
+            subtitle: "Just check out the offices we have and let's subscribe to a place to work ;)",
+            description: 'The software system of flexible selection of the workplace in coworking aims to provide a comfortable search for the coworking area, and the detail information about the workspace that is considering. SmartWork provides for the organization of transparent access to the review of technical and material equipment of the coworking area, available rooms, statistic of their temperature, lighting and attendance.',
+            goTo: 'Go to ',
+            offices: 'Offices'
           }
         }
       },
       ua: {
         translation: {
+          login: 'Логін вікно SmartWork',
+          register: 'Приєднайся до SmartWork',
           loading: {
             app: 'Завантаження застосунку...',
+            companies: 'Завантаження компаній...',
             offices: 'Завантаження офісів...',
             rooms: 'Завантаження кімнат офісу...',
             subscribeDetails: 'Завантаження деталей підписок...',
@@ -103,7 +119,8 @@ i18n
           },
           companies: {
             title: 'Компанії',
-            addBtn: 'Додати компанію'
+            addBtn: 'Додати компанію',
+            description: 'Опис компанії'
           },
           offices: {
             name: 'Офіс'
@@ -143,11 +160,20 @@ i18n
             addRoom: 'Додати кімнату',
             manageOffice: 'Відредагувати офіс',
             viewStatistic: 'Стянути статистику',
-            subscribe: 'Оформити підписку'
+            subscribe: 'Оформити підписку',
+            login: 'Логін',
+            register: 'Реєстрація'
           },
           officeItem: {
             roomsAmount: 'Кількість кімнат',
             companyDescription: 'Опис компанії'
+          },
+          home: {
+            title: 'SmartWork. Знайди своє робоче місце',
+            subtitle: 'Просто заціни офіси які ми маємо для тебе та оформляй підписку ;)',
+            description: 'Програмна система гнучкого вибору робочого місця в коворкінгу має на меті забезпечити комфортний пошук коворкінг-зони та детальну інформацію про робочий простір, що розглядається. SmartWork передбачає організацію прозорого доступу до огляду технічного та матеріального оснащення коворкінгу, наявних кімнат, статистики їх температури, освітлення та відвідуваності.',
+            goTo: 'Нумо перглядати ',
+            offices: 'Офіси'
           }
         }
       }

@@ -34,7 +34,7 @@ export default observer(function UserForm(){
 
     return(
         <Segment clearing>
-            <Header content='Room details' sub color='teal' />
+            <Header content='My info' sub color='teal' />
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize 

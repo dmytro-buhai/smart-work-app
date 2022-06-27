@@ -5,8 +5,10 @@ import MyTextInput from "../../forms/MyTextInput"
 import { useStore } from "../../stores/store"
 import * as Yup from 'yup'
 import ValidationErrors from "../errors/ValidationErrors"
+import { useTranslation } from 'react-i18next';
 
 export default observer(function RegisterForm() {
+    const { t } = useTranslation();
     const {userStore} = useStore();
 
     return (
@@ -31,7 +33,7 @@ export default observer(function RegisterForm() {
         >
             {({handleSubmit, isSubmitting, errors, isValid, dirty}) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h2' content='Sign up to SwartWork' color='teal' textAlign='center' />
+                    <Header as='h2' content={t('register')} color='teal' textAlign='center' />
                     <MyTextInput name='email' placeholder='Email' type='email' />
                     <MyTextInput name='displayName' placeholder='Display Name' />
                     <MyTextInput name='username' placeholder='Username' />

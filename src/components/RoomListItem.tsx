@@ -89,11 +89,11 @@ export default observer(function RoomListItem({room,
                                 {isLoggedIn ? (
                                     <Button 
                                         color='teal' 
-                                        onClick={() =>  handleSubscribe()}
+                                        onClick={() => handleSubscribe()}
                                         content={t('button.subscribe')}
                                     />
                                 ) : (
-                                    <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>Subscribe</Button>
+                                    <Button color='teal' onClick={() => modalStore.openModal(<LoginForm />)}>{t('button.subscribe')}</Button>
                                 )}
                                 <span>
                                     <Button
